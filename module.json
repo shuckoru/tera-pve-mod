@@ -1,0 +1,11 @@
+{
+  "name": "pve-mod",
+  "author": "shuckoru",
+  "description": "PVE mod that helps with fighting things that move",
+  "version": "1.0",
+  "options": {
+    "cliName": "pve-mod",
+    "guiName": "pve-mod"
+  },
+  "servers": ["https://github.com/shuckoru/tera-pve-mod.git"]
+}

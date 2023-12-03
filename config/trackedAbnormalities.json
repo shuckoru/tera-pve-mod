@@ -1,0 +1,63 @@
+{
+  "10153141": {
+    "icon": "Icon_Skills.Ribbreaker_Tex",
+    "name": "Internal Wounds"
+  },
+  "200701": {
+    "icon": "Icon_Skills.fightingwill_Tex",
+    "name": "Lancer Arush"
+  },
+  "702004": {
+    "icon": "Icon_Skills.summonspiritofattack2_Tex",
+    "name": "Mystic 1min buff"
+  },
+  "27160": {
+    "icon": "Icon_Skills.breakmagicaldef_tex",
+    "name": "Mystic Endurance Debuff",
+    "supportDebuff": true
+  },
+  "805802": {
+    "icon": "Icon_Skills.Judgment_Tex",
+    "name": "Priest Edict for self"
+  },
+  "28090": {
+    "icon": "Icon_Skills.breakmagicaldef_tex",
+    "name": "Priest Endurance Debuff",
+    "supportDebuff": true
+  },
+  "10153040": {
+    "icon": "Icon_Skills.Rampage_Tex",
+    "name": "Brawler Tank Mode",
+    "tankMode": true
+  },
+  "10153561": {
+    "icon": "Icon_Skills.Rampage2_Tex",
+    "name": "Brawler DPS Mode",
+    "dpsMode": true
+  },
+  "31090": {
+    "icon": "Icon_Skills.breakphysicaldef_tex",
+    "name": "Brawler Tank Debuff",
+    "tankDebuff": true
+  },
+  "100103": {
+    "icon": "Icon_Skills.ironwillA_Tex",
+    "name": "Warrior DPS Stance",
+    "dpsMode": true
+  },
+  "100201": {
+    "icon": "Icon_Skills.ironwillB_Tex",
+    "name": "Warrior Tank Stance",
+    "tankMode": true
+  },
+  "101210": {
+    "icon": "Icon_Skills.breakphysicaldef_tex",
+    "name": "Warrior Tank Debuff",
+    "tankDebuff": true
+  },
+  "200302": {
+    "icon": "Icon_Skills.BreakPhysicalDef_Tex",
+    "name": "Lancer Debuff",
+    "tankDebuff": true
+  }
+}
