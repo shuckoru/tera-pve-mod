@@ -212,8 +212,6 @@ const unloadModule = () => {
   unwatchConfigFilesChanges(modConfigs);
 };
 
-module.exports = { loadCommands, loadModule, unloadModule };
-
 const loadPlayers = (mod) => {
   mod.hook("S_SPAWN_USER", "*", (event) => {
     players[event.gameId] = true;
@@ -426,3 +424,5 @@ const skillsDamageValueTester = (mod) => {
     }
   });
 };
+
+module.exports = { loadCommands, loadModule, unloadModule };
