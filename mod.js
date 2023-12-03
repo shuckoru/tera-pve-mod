@@ -3,7 +3,7 @@ const {
   sendCustomStyleMessage,
   sendMsgInPartyChat,
   sendModuleBasedInGameCmdMessage,
-} = require("../commons/commons");
+} = require("tera-mod-commons");
 
 const path = require("path");
 
