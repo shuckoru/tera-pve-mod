@@ -10,7 +10,7 @@ const loadJsonConfigurationFile = (filePath, configName, modConfigs) => {
   });
 };
 
-const setGlobalConfigVariables = (modConfigs) => {
+const setModConfigVariables = (modConfigs) => {
   for (let configName in modConfigs) {
     const filePath = modConfigs[configName].filePath;
     fs.watchFile(filePath, (_, __) => {
@@ -26,4 +26,4 @@ const unwatchConfigFilesChanges = (modConfigs) => {
   }
 };
 
-module.exports = { setGlobalConfigVariables, unwatchConfigFilesChanges };
+module.exports = { setModConfigVariables, unwatchConfigFilesChanges };

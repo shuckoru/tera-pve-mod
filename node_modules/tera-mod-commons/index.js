@@ -84,6 +84,17 @@ const sendMsgInCustomPrivateChannel = (mod) => (msg, channelId) => {
 const sendModuleBasedInGameCmdMessage = (mod) => (moduleName) => (msg) =>
   mod.command.message(`[${moduleName}] ${msg}`);
 
+const sendModuleBasedInGameCmdMessageFromObject =
+  (mod) => (moduleName) => (obj) => {
+    let msg = "";
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        msg += `${key}: ${obj[key]}\n`;
+      }
+    }
+    mod.command.message(`[${moduleName}] ${msg}`);
+  };
+
 module.exports = {
   sendMsg,
   sendCustomStyleMessage,
@@ -92,4 +103,5 @@ module.exports = {
   ChatChannels,
   reloadEnv,
   sendModuleBasedInGameCmdMessage,
+  sendModuleBasedInGameCmdMessageFromObject,
 };

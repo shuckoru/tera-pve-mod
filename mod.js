@@ -8,11 +8,14 @@ const {
 const path = require("path");
 
 const {
-  setGlobalConfigVariables,
+  setModConfigVariables,
   unwatchConfigFilesChanges,
 } = require("./config");
 
 const ModuleName = "PVE";
+
+const sendInGameCmdMessage = (mod) => (msg) =>
+  sendModuleBasedInGameCmdMessage(mod)(ModuleName)(msg);
 
 const modConfigs = {
   blacklistedAbnormalities: {
@@ -27,11 +30,13 @@ const modConfigs = {
 
 const switches = {
   dpsEnabled: true,
-  dpsEnabltimerEnableded: true,
+  dpsEnabledTimer: true,
   burnMsgEnabled: false,
   dmgValueTestEnabled: false,
+  abnormalitiesDebugEnabled: false,
   dmgValueTestVerboose: false,
   autoPasteFightDetailsInPartyChat: false,
+  hideAbnormalitiesEnabled: true,
 };
 
 let bossGameId;
@@ -46,6 +51,8 @@ let players = {};
 let spacesInBetweenDpsAndTimer = 13;
 let lastFightDetailsMsg;
 let playerRole = 2;
+
+const DPSDmgType = 1;
 
 const damageValueTesterSkillsCast = {};
 
@@ -72,37 +79,51 @@ const MessageTypes = {
 };
 
 const Messages = {
-  AvailableCommands:
-    "Available commands: 'dps', 'timer', 'burn', 'reset', 'paste', 'autopaste', 'dmgvt', 'dmgvtv', 'ftskill <skillId>', 'ftskillrm <skillId>'.",
+  AvailableCommands: `
+  Available commands:
+  - 'abdebug': Toggle Abnormalities Debug mode.
+  - 'dps': Toggles the DPS meter.
+  - 'timer': Toggles the fight timer.
+  - 'burn': Toggles the burn reminder.
+  - 'reset': Resets the current state.
+  - 'paste': Pastes the fight details in the party chat.
+  - 'autopaste': Toggles automatic pasting of fight details in the party chat.
+  - 'dvt': Toggles the damage value tester.
+  - 'ftskill <skillId>': Adds a skill to the first tick skills list.
+  - 'ftskillrm <skillId>': Removes a skill from the first tick skills list.`,
+  AbnormalitiesDebugModeStatus: (enabled) =>
+    `Abnormalities Debug Mode: ${enabled ? "enabled" : "disabled"}.`,
   FightStarted: "Fight started.",
   FirstTickSkillsRemove: (skillId) =>
     `Removed ${skillId} to be counted as 1st damage tick skill.`,
   FirstTickSkillsAdd: (skillId) =>
     `Added ${skillId} to be counted as 1st damage tick skill.`,
   DamageValueRaw: (event, eventTime, dmg) =>
-    `${event.skill.id} - ${eventTime} - ${(dmg / 10 / eventTime).toFixed(2)}`,
-  DamageValueVerbose: (event, eventTime, dmg) =>
-    `skillId: ${event.skill.id} - eventTime: ${eventTime} - DamageValue: ${(
+    `${event.skill.id} - ${eventTime.toFixed(1)} - ${(
       dmg /
       10 /
       eventTime
-    ).toFixed(2)} - Damage: ${dmg}`,
+    ).toFixed(2)}`,
+  DamageValueVerbose: (event, eventTime, dmg) =>
+    `skillId: ${event.skill.id} - eventTime: ${eventTime.toFixed(
+      1
+    )} - DamageValue: ${(dmg / 10 / eventTime).toFixed(2)} - Damage: ${dmg}`,
   DamageValueTestLegend: `SkillId, AnimationTime, DamageValue`,
   DamageValueVerbooseEnabled: (enabled) =>
-    `Damage Value Tester verboose: ${enabled ? "enabled." : "disabled."}`,
+    `Damage Value Tester verboose: ${enabled ? "enabled" : "disabled"}.`,
   DamageValueTest: (enabled) =>
-    `Damage Value Tester: ${enabled ? "enabled." : "disabled."}`,
+    `Damage Value Tester: ${enabled ? "enabled" : "disabled"}.`,
   DPSMeterEnabled: (enabled) =>
-    `DPS meter: ${enabled ? "enabled." : "disabled."}`,
+    `DPS meter: ${enabled ? "enabled" : "disabled"}.`,
   FightTimerEnabled: (enabled) =>
-    `Fight timer: ${enabled ? "enabled." : "disabled."}`,
+    `Fight timer: ${enabled ? "enabled" : "disabled"}.`,
   BurnReminderEnabled: (enabled) =>
-    `Burn reminder: ${enabled ? "enabled." : "disabled."}`,
+    `Burn reminder: ${enabled ? "enabled" : "disabled"}.`,
   FightDetailsAutoPaste: (enabled) =>
-    `Fight details auto paste: ${enabled ? "enabled." : "disabled."}`,
+    `Fight details auto paste: ${enabled ? "enabled" : "disabled"}.`,
   FightDetails: () => `Fight ended and it last: ${fightTimer}.
-  Party dps: ${partyDps}.
-  Personal dps: ${personalDps}`,
+Party dps: ${partyDps}.
+Personal dps: ${personalDps}`,
   TrackedDebuffExpiring: (icon) =>
     `<img src="img://__${icon}"width="48"height="48"vspace="-20"/><font size="24">&nbsp;ending</font>`,
   TrackedAbnormalityActivated: (icon) =>
@@ -126,100 +147,19 @@ const Messages = {
     )} M/s`,
   PersonalDPSWithTimer: () =>
     `${fightTimer}${" ".repeat(spacesInBetweenDpsAndTimer)}${personalDps}`,
-  ModFeatureStatus: `dpsEnabled=${switches.dpsEnabled}, dpsEnabltimerEnableded=${switches.dpsEnabltimerEnableded}, burnMsgEnabled=${switches.burnMsgEnabled}, spacesInBetweenDpsAndTimer=${spacesInBetweenDpsAndTimer}, autoPasteFightDetailsInPartyChat=${switches.autoPasteFightDetailsInPartyChat}`,
+  ModFeatureStatus: `dpsEnabled=${switches.dpsEnabled}, 
+dpsEnabledTimer=${switches.dpsEnabledTimer}, 
+burnMsgEnabled=${switches.burnMsgEnabled}, 
+spacesInBetweenDpsAndTimer=${spacesInBetweenDpsAndTimer}, 
+abnormalitiesDebugEnabled=${switches.abnormalitiesDebugEnabled}, 
+autoPasteFightDetailsInPartyChat=${switches.autoPasteFightDetailsInPartyChat}`,
 };
 
-const sendInGameCmdMessage = (mod) => (msg) =>
-  sendModuleBasedInGameCmdMessage(mod)(ModuleName)(msg);
-
-const loadModule = (mod) => {
-  setGlobalConfigVariables(modConfigs);
-
-  modGameMeOnHooks(mod);
-  eachSkillResultHook(mod);
-  despawnNpcHook(mod);
-  bossGageHook(mod);
-  abnormalitiesBeginHook(mod);
-  skillsDamageValueTester(mod);
-};
-
-const loadCommands = (mod) => {
-  mod.command.add("pve", {
-    help: () => {
-      sendInGameCmdMessage(mod)(Messages.AvailableCommands);
-    },
-    dps: () => {
-      switches.dpsEnabled = !switches.dpsEnabled;
-      sendInGameCmdMessage(mod)(Messages.DPSMeterEnabled(switches.dpsEnabled));
-    },
-    timer: () => {
-      switches.dpsEnabltimerEnableded = !switches.dpsEnabltimerEnableded;
-      sendInGameCmdMessage(mod)(
-        Messages.FightTimerEnabled(switches.dpsEnabltimerEnableded)
-      );
-    },
-    burn: () => {
-      switches.burnMsgEnabled = !switches.burnMsgEnabled;
-      sendInGameCmdMessage(mod)(
-        Messages.BurnReminderEnabled(switches.burnMsgEnabled)
-      );
-    },
-    reset: () => {
-      resetDps(mod);
-    },
-    autopaste: () => {
-      switches.autoPasteFightDetailsInPartyChat =
-        !switches.autoPasteFightDetailsInPartyChat;
-      sendInGameCmdMessage(mod)(
-        Messages.FightDetailsAutoPaste(
-          switches.switches.autoPasteFightDetailsInPartyChat
-        )
-      );
-    },
-    paste: () => {
-      sendMsgInPartyChat(mod)(lastFightDetailsMsg);
-    },
-    dmgvt: () => {
-      switches.dmgValueTestEnabled = !switches.dmgValueTestEnabled;
-      sendInGameCmdMessage(mod)(
-        Messages.DamageValueTest(switches.dmgValueTestEnabled)
-      );
-      if (switches.dmgValueTestEnabled)
-        sendInGameCmdMessage(mod)(Messages.DamageValueTestLegend);
-    },
-    dmgvtv: () => {
-      switches.dmgValueTestVerboose = !switches.dmgValueTestVerboose;
-      sendInGameCmdMessage(mod)(
-        Messages.DamageValueVerbooseEnabled(switches.dmgValueTestVerboose)
-      );
-    },
-    ftskill: (skillId) => {
-      firstTickSkills[skillId] = "";
-      sendInGameCmdMessage(mod)(Messages.FirstTickSkillsAdd(skillId));
-    },
-    ftskillrm: (skillId) => {
-      if (!(skillId in firstTickSkills)) return;
-      delete firstTickSkills[skillId];
-      sendInGameCmdMessage(mod)(Messages.FirstTickSkillsRemove(skillId));
-    },
-    $none: () => {
-      sendInGameCmdMessage(mod)(Messages.ModFeatureStatus);
-    },
-  });
-};
-
-const unloadModule = () => {
-  unwatchConfigFilesChanges(modConfigs);
-};
-
-const loadPlayers = (mod) => {
-  mod.hook("S_SPAWN_USER", "*", (event) => {
-    players[event.gameId] = true;
-  });
-
-  mod.hook("S_DESPAWN_USER", "*", (event) => {
-    delete players[event.gameId];
-  });
+const testHook = (mod) => {
+  // mod.hook("S_ACTION_STAGE", 9, { filter: { fake: null } }, (event) => {
+  //   if (!mod.game.me.is(event.gameId)) return;
+  //   console.log(event);
+  // });
 };
 
 const resetDps = (mod) => {
@@ -231,9 +171,22 @@ const resetDps = (mod) => {
   sendCustomStyleMessage(mod)(" ", ...Object.values(MessageTypes.PersonalDPS));
 };
 
-const abnormalitiesBeginHook = (mod) => {
+const abnormsHelpersMod = (mod) => {
+  mod.game.me.on("change_zone", (zone, quick) => {
+    switch (mod.game.me.class) {
+      case "lancer":
+        playerRole = PlayerRoles.Tank;
+        break;
+      case "priest":
+      case "mystic":
+        playerRole = PlayerRoles.Healer;
+        break;
+      default:
+        playerRole = PlayerRoles.DPS;
+        break;
+    }
+  });
   mod.hook("S_ABNORMALITY_BEGIN", "*", (event) => {
-    if (event.id in modConfigs.blacklistedAbnormalities.data) return false;
     if (!mod.game.me.inDungeon) return;
 
     if (event.id in modConfigs.trackedAbnormalities.data) {
@@ -265,7 +218,16 @@ const abnormalitiesBeginHook = (mod) => {
   });
 };
 
-const bossGageHook = (mod) => {
+const abnormsHideMod = (mod) => {
+  mod.hook("S_ABNORMALITY_BEGIN", "*", (event) => {
+    if (!switches.hideAbnormalitiesEnabled) return;
+    if (event.id in modConfigs.blacklistedAbnormalities.data) return false;
+    if (switches.abnormalitiesDebugEnabled) sendInGameCmdMessage(mod)(event.id);
+  });
+};
+
+const dpsMeterMod = (mod) => {
+  // Fight Start && Party Dps Calc
   mod.hook("S_BOSS_GAGE_INFO", "*", (event) => {
     if (bossGameId != event.id) {
       bossGameId = event.id;
@@ -294,7 +256,7 @@ const bossGageHook = (mod) => {
       if (fightDurationInSeconds == 0) break inFight;
 
       if (switches.dpsEnabled)
-        if (switches.dpsEnabltimerEnableded)
+        if (switches.dpsEnabledTimer)
           sendCustomStyleMessage(mod)(
             Messages.PersonalDPSWithTimer(),
             ...Object.values(MessageTypes.PersonalDPS)
@@ -316,9 +278,21 @@ const bossGageHook = (mod) => {
           );
     }
   });
-};
 
-const despawnNpcHook = (mod) => {
+  // Personal DPS calc
+  mod.hook("S_EACH_SKILL_RESULT", 14, { order: 99 }, (event) => {
+    if (mod.game.me.level < 65 || event.type != DPSDmgType) return;
+    if (
+      mod.game.me.gameId === event.source ||
+      mod.game.me.gameId === event.owner
+    )
+      if (event.target == bossGameId) personalDamageDone += Number(event.value);
+  });
+
+  // End of fight
+  mod.game.me.on("change_zone", (zone, quick) => {
+    resetDps(mod);
+  });
   mod.hook("S_DESPAWN_NPC", "*", (event) => {
     if (event.gameId != bossGameId) return event;
 
@@ -341,39 +315,21 @@ const despawnNpcHook = (mod) => {
   });
 };
 
-const modGameMeOnHooks = (mod) => {
-  mod.game.me.on("change_zone", (zone, quick) => {
-    resetDps(mod);
+const smolDmgMod = (mod) => {
+  mod.hook("S_SPAWN_USER", "*", (event) => {
+    players[event.gameId] = true;
   });
-  mod.game.me.on("change_zone", (zone, quick) => {
-    switch (mod.game.me.class) {
-      case "lancer":
-        playerRole = PlayerRoles.Tank;
-        break;
-      case "priest":
-      case "mystic":
-        playerRole = PlayerRoles.Healer;
-        break;
-      default:
-        playerRole = PlayerRoles.DPS;
-        break;
-    }
+
+  mod.hook("S_DESPAWN_USER", "*", (event) => {
+    delete players[event.gameId];
   });
   mod.game.me.on("leave_loading_screen", () => (players = {}));
-};
-
-const eachSkillResultHook = (mod) => {
-  const DPSDmgType = 1;
-  loadPlayers(mod);
   mod.hook("S_EACH_SKILL_RESULT", 14, { order: 100 }, (event) => {
-    if (mod.game.me.level < 65) return;
+    if (mod.game.me.level < 65 || event.type != DPSDmgType) return;
     if (
-      (mod.game.me.gameId === event.source ||
-        mod.game.me.gameId === event.owner) &&
-      event.type === DPSDmgType
+      mod.game.me.gameId === event.source ||
+      mod.game.me.gameId === event.owner
     ) {
-      if (event.target == bossGameId) personalDamageDone += Number(event.value);
-
       let smolDmg = 0;
       if (players[event.target] != undefined)
         smolDmg = Number(event.value) / Number(1);
@@ -423,6 +379,97 @@ const skillsDamageValueTester = (mod) => {
       );
     }
   });
+};
+
+const loadModule = (mod) => {
+  setModConfigVariables(modConfigs);
+
+  testHook(mod);
+
+  dpsMeterMod(mod);
+  smolDmgMod(mod);
+
+  abnormsHideMod(mod);
+  abnormsHelpersMod(mod);
+  skillsDamageValueTester(mod);
+};
+
+const loadCommands = (mod) => {
+  mod.command.add("pve", {
+    help: () => {
+      sendInGameCmdMessage(mod)(Messages.AvailableCommands);
+    },
+    dps: () => {
+      switches.dpsEnabled = !switches.dpsEnabled;
+      sendInGameCmdMessage(mod)(Messages.DPSMeterEnabled(switches.dpsEnabled));
+    },
+    timer: () => {
+      switches.dpsEnabledTimer = !switches.dpsEnabledTimer;
+      sendInGameCmdMessage(mod)(
+        Messages.FightTimerEnabled(switches.dpsEnabledTimer)
+      );
+    },
+    burn: () => {
+      switches.burnMsgEnabled = !switches.burnMsgEnabled;
+      sendInGameCmdMessage(mod)(
+        Messages.BurnReminderEnabled(switches.burnMsgEnabled)
+      );
+    },
+    reset: () => {
+      resetDps(mod);
+    },
+    autopaste: () => {
+      switches.autoPasteFightDetailsInPartyChat =
+        !switches.autoPasteFightDetailsInPartyChat;
+      sendInGameCmdMessage(mod)(
+        Messages.FightDetailsAutoPaste(
+          switches.switches.autoPasteFightDetailsInPartyChat
+        )
+      );
+    },
+    paste: () => {
+      sendMsgInPartyChat(mod)(lastFightDetailsMsg);
+    },
+    dvt: (verboose) => {
+      if (verboose) {
+        switches.dmgValueTestVerboose = !switches.dmgValueTestVerboose;
+        sendInGameCmdMessage(mod)(
+          Messages.DamageValueVerbooseEnabled(switches.dmgValueTestVerboose)
+        );
+        return;
+      }
+      switches.dmgValueTestEnabled = !switches.dmgValueTestEnabled;
+      sendInGameCmdMessage(mod)(
+        Messages.DamageValueTest(switches.dmgValueTestEnabled)
+      );
+      if (switches.dmgValueTestEnabled)
+        sendInGameCmdMessage(mod)(Messages.DamageValueTestLegend);
+    },
+    ftskill: (skillId) => {
+      firstTickSkills[skillId] = "";
+      sendInGameCmdMessage(mod)(Messages.FirstTickSkillsAdd(skillId));
+    },
+    ftskillrm: (skillId) => {
+      if (!(skillId in firstTickSkills)) return;
+      delete firstTickSkills[skillId];
+      sendInGameCmdMessage(mod)(Messages.FirstTickSkillsRemove(skillId));
+    },
+    abdebug: () => {
+      switches.abnormalitiesDebugEnabled = !switches.abnormalitiesDebugEnabled;
+      sendInGameCmdMessage(mod)(
+        Messages.AbnormalitiesDebugModeStatus(
+          switches.abnormalitiesDebugEnabled
+        )
+      );
+    },
+    $none: () => {
+      sendInGameCmdMessage(mod)(Messages.ModFeatureStatus);
+    },
+  });
+};
+
+const unloadModule = () => {
+  unwatchConfigFilesChanges(modConfigs);
 };
 
 module.exports = { loadCommands, loadModule, unloadModule };
