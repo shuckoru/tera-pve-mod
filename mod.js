@@ -3,6 +3,7 @@ const {
   sendCustomStyleMessage,
   sendMsgInPartyChat,
   sendModuleBasedInGameCmdMessage,
+  sendModuleBasedInGameCmdMessageFromObject,
 } = require("tera-mod-commons");
 
 const path = require("path");
@@ -16,6 +17,8 @@ const ModuleName = "PVE";
 
 const sendInGameCmdMessage = (mod) => (msg) =>
   sendModuleBasedInGameCmdMessage(mod)(ModuleName)(msg);
+const sendInGameCmdMessageFromObject = (mod) => (msg) =>
+  sendInGameCmdMessageFromObject(mod)(ModuleName)(msg);
 
 const modConfigs = {
   blacklistedAbnormalities: {
@@ -80,17 +83,21 @@ const MessageTypes = {
 
 const Messages = {
   AvailableCommands: `
-  Available commands:
-  - 'abdebug': Toggle Abnormalities Debug mode.
-  - 'dps': Toggles the DPS meter.
-  - 'timer': Toggles the fight timer.
-  - 'burn': Toggles the burn reminder.
-  - 'reset': Resets the current state.
-  - 'paste': Pastes the fight details in the party chat.
-  - 'autopaste': Toggles automatic pasting of fight details in the party chat.
-  - 'dvt': Toggles the damage value tester.
-  - 'ftskill <skillId>': Adds a skill to the first tick skills list.
-  - 'ftskillrm <skillId>': Removes a skill from the first tick skills list.`,
+Available commands:
+help        - Show available commands
+dps         - Toggle DPS meter
+timer       - Toggle Fight Timer
+burn        - Toggle Burn Reminder
+reset       - Reset DPS
+autopaste   - Toggle automatic pasting of fight details in party chat
+paste       - Send last fight details message in party chat
+dvt         - Toggle damage value test. Use 'dvt v' for verbose mode
+ftskill     - Add a skill to first tick skills. Usage: 'ftskill <skillId>'
+ftskillrm   - Remove a skill from first tick skills. Usage: 'ftskillrm <skillId>'
+abhide      - Toggle hiding of abnormalities
+abdebug     - Toggle abnormalities debug mode`,
+  AbnormalitiesHideStatus: (enabled) =>
+    `Abnormalities Hide Mode: ${enabled ? "enabled" : "disabled"}.`,
   AbnormalitiesDebugModeStatus: (enabled) =>
     `Abnormalities Debug Mode: ${enabled ? "enabled" : "disabled"}.`,
   FightStarted: "Fight started.",
@@ -124,6 +131,8 @@ const Messages = {
   FightDetails: () => `Fight ended and it last: ${fightTimer}.
 Party dps: ${partyDps}.
 Personal dps: ${personalDps}`,
+  TrackedDebuffExpired: (icon) =>
+    `<img src="img://__${icon}"width="48"height="48"vspace="-20"/><font size="24">&nbsp;expired</font>`,
   TrackedDebuffExpiring: (icon) =>
     `<img src="img://__${icon}"width="48"height="48"vspace="-20"/><font size="24">&nbsp;ending</font>`,
   TrackedAbnormalityActivated: (icon) =>
@@ -186,6 +195,7 @@ const abnormsHelpersMod = (mod) => {
         break;
     }
   });
+
   mod.hook("S_ABNORMALITY_BEGIN", "*", (event) => {
     if (!mod.game.me.inDungeon) return;
 
@@ -214,6 +224,47 @@ const abnormsHelpersMod = (mod) => {
           Messages.TrackedAbnormalityActivated(icon),
           ...Object.values(MessageTypes.TrackedAbnormalityActivated)
         );
+    }
+  });
+
+  mod.hook("S_ABNORMALITY_REFRESH", "*", (event) => {
+    if (!mod.game.me.inDungeon) return;
+
+    if (!(event.id in modConfigs.trackedAbnormalities.data)) return;
+
+    const { icon, tankDebuff, supportDebuff } =
+      modConfigs.trackedAbnormalities.data[event.id];
+    if (
+      (tankDebuff && playerRole == PlayerRoles.Tank) ||
+      (supportDebuff && playerRole == PlayerRoles.Healer)
+    ) {
+      clearTimeout(trackedDebuffTimeout);
+      trackedDebuffTimeout = setTimeout(() => {
+        sendCustomStyleMessage(mod)(
+          Messages.TrackedDebuffExpiring(icon),
+          ...Object.values(MessageTypes.TrackedDebuffExpiring)
+        );
+      }, 18 * 1000);
+    }
+  });
+  mod.hook("S_ABNORMALITY_END", "*", (event) => {
+    if (!mod.game.me.inDungeon) return;
+
+    if (!(event.id in modConfigs.trackedAbnormalities.data)) return;
+
+    const { icon, tankDebuff, supportDebuff } =
+      modConfigs.trackedAbnormalities.data[event.id];
+    if (
+      (tankDebuff && playerRole == PlayerRoles.Tank) ||
+      (supportDebuff && playerRole == PlayerRoles.Healer)
+    ) {
+      clearTimeout(trackedDebuffTimeout);
+      trackedDebuffTimeout = setInterval(() => {
+        sendCustomStyleMessage(mod)(
+          Messages.TrackedDebuffExpired(icon),
+          ...Object.values(MessageTypes.TrackedDebuffExpiring)
+        );
+      }, 2 * 1000);
     }
   });
 };
@@ -325,7 +376,7 @@ const smolDmgMod = (mod) => {
   });
   mod.game.me.on("leave_loading_screen", () => (players = {}));
   mod.hook("S_EACH_SKILL_RESULT", 14, { order: 100 }, (event) => {
-    if (mod.game.me.level < 65 || event.type != DPSDmgType) return;
+    if (mod.game.me.level < 65) return;
     if (
       mod.game.me.gameId === event.source ||
       mod.game.me.gameId === event.owner
@@ -453,6 +504,12 @@ const loadCommands = (mod) => {
       if (!(skillId in firstTickSkills)) return;
       delete firstTickSkills[skillId];
       sendInGameCmdMessage(mod)(Messages.FirstTickSkillsRemove(skillId));
+    },
+    abhide: () => {
+      switches.hideAbnormalitiesEnabled = !switches.hideAbnormalitiesEnabled;
+      sendInGameCmdMessage(mod)(
+        Messages.AbnormalitiesHideStatus(switches.hideAbnormalitiesEnabled)
+      );
     },
     abdebug: () => {
       switches.abnormalitiesDebugEnabled = !switches.abnormalitiesDebugEnabled;

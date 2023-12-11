@@ -1,4 +1,3 @@
-```markdown
 # PVE Module
 
 This module is designed to provide various functionalities for Player vs Environment (PVE) in the game TERA.
@@ -44,4 +43,3 @@ The module provides several commands that can be used in the game:
 If you feel like this mod has been helpful to you feel free to buy me a coffe: https://ko-fi.com/shuckol
 
 Note: `/node_modules` sadly needs to be pushed in the repo because tera-toolbox doesn't support installing dependencies automatically..
-```
