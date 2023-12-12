@@ -30,7 +30,7 @@ const modConfigs = {
 const switches = {
   dpsEnabled: true,
   dpsEnabledTimer: true,
-  burnMsgEnabled: false,
+  burnMsgEnabled: true,
   dmgValueTestEnabled: false,
   abnormalitiesDebugEnabled: false,
   dmgValueTestVerboose: false,
@@ -51,16 +51,10 @@ let spacesInBetweenDpsAndTimer = 13;
 let lastFightDetailsMsg;
 let playerRole = 2;
 
-const DPSDmgType = 1;
-
 const damageValueTesterSkillsCast = {};
 
 let trackedEnduranceDebuffTimeout;
 let trackedEnduranceDebuffExpiredWarnings = 0;
-
-const firstTickSkills = {
-  240130: "OIP",
-};
 
 const PlayerRoles = {
   Tank: 0,
@@ -89,21 +83,19 @@ reset       - Reset DPS
 autopaste   - Toggle automatic pasting of fight details in party chat
 paste       - Send last fight details message in party chat
 dvt         - Toggle damage value test. Use 'dvt v' for verbose mode
-ftskill     - Add a skill to first tick skills. Usage: 'ftskill <skillId>'
-ftskillrm   - Remove a skill from first tick skills. Usage: 'ftskillrm <skillId>'
 abhide      - Toggle hiding of abnormalities
 abdebug     - Toggle abnormalities debug mode`,
   AbnormalitiesHideStatus: (enabled) => `Abnormalities Hide Mode: ${enabled ? "enabled" : "disabled"}.`,
   AbnormalitiesDebugModeStatus: (enabled) => `Abnormalities Debug Mode: ${enabled ? "enabled" : "disabled"}.`,
   FightStarted: "Fight started.",
-  FirstTickSkillsRemove: (skillId) => `Removed ${skillId} to be counted as 1st damage tick skill.`,
-  FirstTickSkillsAdd: (skillId) => `Added ${skillId} to be counted as 1st damage tick skill.`,
-  DamageValueRaw: (event, eventTime, dmg) =>
-    `${event.skill.id} - ${eventTime.toFixed(1)} - ${(dmg / 10 / eventTime).toFixed(2)}`,
-  DamageValueVerbose: (event, eventTime, dmg) =>
-    `skillId: ${event.skill.id} - eventTime: ${eventTime.toFixed(1)} - DamageValue: ${(dmg / 10 / eventTime).toFixed(
-      2
-    )} - Damage: ${dmg}`,
+  DamageValueRaw: (event, executionTime, dmg) =>
+    `${event.skill.id} - ${(executionTime / 1000).toFixed(1)} - ${(dmg / 1000 / executionTime).toFixed(2)}`,
+  DamageValueVerbose: (event, executionTime, dmg) =>
+    `skillId: ${event.skill.id} - executionTime: ${(executionTime / 1000).toFixed(1)} - DamageValue: ${(
+      dmg /
+      1000 /
+      executionTime
+    ).toFixed(2)} - Damage: ${dmg}`,
   DamageValueTestLegend: `SkillId, AnimationTime, DamageValue`,
   DamageValueVerbooseEnabled: (enabled) => `Damage Value Tester verboose: ${enabled ? "enabled" : "disabled"}.`,
   DamageValueTest: (enabled) => `Damage Value Tester: ${enabled ? "enabled" : "disabled"}.`,
@@ -128,7 +120,7 @@ Personal dps: ${personalDps}`,
   PartyDPS: (event) => `${(Number(event.maxHp - event.curHp) / 1000000 / fightDurationInSeconds).toFixed(1)} M/s`,
   PersonalDPS: () => `${(Number(personalDamageDone) / 1000000 / fightDurationInSeconds).toFixed(1)} M/s`,
   PersonalDPSWithTimer: () => `${fightTimer}${" ".repeat(spacesInBetweenDpsAndTimer)}${personalDps}`,
-  ModFeatureStatus: `
+  ModFeatureStatus: (switches) => `
 [${switches.dpsEnabled ? "Enabled" : "Disabled"}] DPS
 [${switches.dpsEnabledTimer ? "Enabled" : "Disabled"}] DPS Timer
 [${switches.burnMsgEnabled ? "Enabled" : "Disabled"}] Burn Message
@@ -276,7 +268,7 @@ const dpsMeterMod = (mod) => {
 
   // Personal DPS calc
   mod.hook("S_EACH_SKILL_RESULT", "*", { order: 99 }, (event) => {
-    if (mod.game.me.level < 65 || event.type != DPSDmgType) return;
+    if (mod.game.me.level < 65 || event.type != 1) return;
     if (mod.game.me.gameId === event.source || mod.game.me.gameId === event.owner)
       if (event.target == bossGameId) personalDamageDone += Number(event.value);
   });
@@ -327,64 +319,51 @@ const smolDmgMod = (mod) => {
 };
 
 const skillsDamageValueTester = (mod) => {
-  // start skill timer
-  // get data
-  // end skill timer
-
-  return;
-
   mod.hook("S_ACTION_STAGE", "*", { filter: { fake: null } }, (event) => {
-    // if (!switches.dmgValueTestEnabled) return;
-
-    if (!mod.game.me.is(event.gameId)) return;
+    if (!switches.dmgValueTestEnabled || !mod.game.me.is(event.gameId)) return;
 
     if (damageValueTesterSkillsCast[event.skill.id] && damageValueTesterSkillsCast[event.skill.id].eventId != event.id)
       delete damageValueTesterSkillsCast[event.skill.id];
 
     damageValueTesterSkillsCast[event.skill.id] = {
       eventId: event.id,
-      time: Date.now(),
+      startTimestamp: Date.now(),
     };
-    // sendInGameCmdMessage(mod)("set time START for skill: " + event.skill.id);
   });
 
   mod.hook("S_ACTION_END", "*", { filter: { fake: null } }, (event) => {
-    // if (!switches.dmgValueTestEnabled) return;
+    if (!switches.dmgValueTestEnabled || !mod.game.me.is(event.gameId)) return;
 
-    if (!mod.game.me.is(event.gameId)) return;
+    const { startTimestamp, damage } = damageValueTesterSkillsCast[event.skill.id];
 
-    const { time } = damageValueTesterSkillsCast[event.skill.id];
+    const executionTime = Date.now() - startTimestamp;
 
-    // sendInGameCmdMessage(mod)(
-    //   "set time END for skill: " + event.skill.id + " of " + (Date.now() - time)
-    // );
+    damageValueTesterSkillsCast[event.skill.id].executionTime = executionTime;
 
-    damageValueTesterSkillsCast[event.skill.id].time = Date.now() - time;
+    if (damage)
+      sendInGameCmdMessage(mod)(
+        switches.dmgValueTestVerboose
+          ? Messages.DamageValueVerbose(event, executionTime, damage)
+          : Messages.DamageValueRaw(event, executionTime, damage)
+      );
   });
 
   mod.hook("S_EACH_SKILL_RESULT", "*", { order: 98 }, (event) => {
-    // if (!switches.dmgValueTestEnabled) return;
-    if (mod.game.me.gameId != event.source) return;
+    if (!switches.dmgValueTestEnabled || !mod.game.me.is(event.source)) return;
 
     if (event.value > 0n && damageValueTesterSkillsCast[event.skill.id]) {
-      let eventTime = damageValueTesterSkillsCast[event.skill.id].time;
+      const { executionTime, damage } = damageValueTesterSkillsCast[event.skill.id];
 
-      let dmg = damageValueTesterSkillsCast[event.skill.id].damage
-        ? Number(damageValueTesterSkillsCast[event.skill.id].damage) + Number(event.value)
-        : Number(event.value);
+      const updatedDamage = damage ? Number(damage) + Number(event.value) : Number(event.value);
 
-      damageValueTesterSkillsCast[event.skill.id].damage = dmg;
+      damageValueTesterSkillsCast[event.skill.id].damage = updatedDamage;
 
-      let damageValue = (dmg / 10000000 / eventTime).toFixed(3);
-
-      sendInGameCmdMessage("damageValue" + damageValue);
-
-      damageValueTesterSkillsCast[event.skill.id].damageValue = damageValue;
-
-      sendInGameCmdMessage(mod)(
-        // switches.dmgValueTestVerboose
-        true ? Messages.DamageValueVerbose(event, eventTime, dmg) : Messages.DamageValueRaw(event, eventTime, dmg)
-      );
+      if (executionTime && updatedDamage)
+        sendInGameCmdMessage(mod)(
+          switches.dmgValueTestVerboose
+            ? Messages.DamageValueVerbose(event, executionTime, updatedDamage)
+            : Messages.DamageValueRaw(event, executionTime, updatedDamage)
+        );
     }
   });
 };
@@ -438,15 +417,6 @@ const loadCommands = (mod) => {
       sendInGameCmdMessage(mod)(Messages.DamageValueTest(switches.dmgValueTestEnabled));
       if (switches.dmgValueTestEnabled) sendInGameCmdMessage(mod)(Messages.DamageValueTestLegend);
     },
-    ftskill: (skillId) => {
-      firstTickSkills[skillId] = "";
-      sendInGameCmdMessage(mod)(Messages.FirstTickSkillsAdd(skillId));
-    },
-    ftskillrm: (skillId) => {
-      if (!(skillId in firstTickSkills)) return;
-      delete firstTickSkills[skillId];
-      sendInGameCmdMessage(mod)(Messages.FirstTickSkillsRemove(skillId));
-    },
     abhide: () => {
       switches.hideAbnormalitiesEnabled = !switches.hideAbnormalitiesEnabled;
       sendInGameCmdMessage(mod)(Messages.AbnormalitiesHideStatus(switches.hideAbnormalitiesEnabled));
@@ -456,7 +426,7 @@ const loadCommands = (mod) => {
       sendInGameCmdMessage(mod)(Messages.AbnormalitiesDebugModeStatus(switches.abnormalitiesDebugEnabled));
     },
     $none: () => {
-      sendInGameCmdMessage(mod)(Messages.ModFeatureStatus);
+      sendInGameCmdMessage(mod)(Messages.ModFeatureStatus(switches));
     },
   });
 };
