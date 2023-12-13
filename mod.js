@@ -38,29 +38,7 @@ const switches = {
   hideAbnormalitiesEnabled: true,
 };
 
-let bossGameId;
-let fightTimer;
-let fightStartInSeconds = 0;
-let fightEndInSeconds;
-let fightDurationInSeconds = 0;
-let personalDamageDone = 0;
-let partyDps = "0 M/s";
-let personalDps = "0 M/s";
-let players = {};
-let spacesInBetweenDpsAndTimer = 13;
 let lastFightDetailsMsg;
-let playerRole = 2;
-
-const damageValueTesterSkillsCast = {};
-
-let trackedEnduranceDebuffTimeout;
-let trackedEnduranceDebuffExpiredWarnings = 0;
-
-const PlayerRoles = {
-  Tank: 0,
-  DPS: 1,
-  Healer: 2,
-};
 
 const MessageTypes = {
   PersonalDPS: { id: 1, style: 82 },
@@ -79,7 +57,6 @@ help        - Show available commands
 dps         - Toggle DPS meter
 timer       - Toggle Fight Timer
 burn        - Toggle Burn Reminder
-reset       - Reset DPS
 autopaste   - Toggle automatic pasting of fight details in party chat
 paste       - Send last fight details message in party chat
 dvt         - Toggle damage value test. Use 'dvt v' for verbose mode
@@ -88,14 +65,14 @@ abdebug     - Toggle abnormalities debug mode`,
   AbnormalitiesHideStatus: (enabled) => `Abnormalities Hide Mode: ${enabled ? "enabled" : "disabled"}.`,
   AbnormalitiesDebugModeStatus: (enabled) => `Abnormalities Debug Mode: ${enabled ? "enabled" : "disabled"}.`,
   FightStarted: "Fight started.",
-  DamageValueRaw: (event, executionTime, dmg) =>
-    `${event.skill.id} - ${(executionTime / 1000).toFixed(1)} - ${(dmg / 1000 / executionTime).toFixed(2)}`,
-  DamageValueVerbose: (event, executionTime, dmg) =>
-    `skillId: ${event.skill.id} - executionTime: ${(executionTime / 1000).toFixed(1)} - DamageValue: ${(
-      dmg /
-      1000 /
+  DamageValueRaw: (dmg, executionTime) => dmg / 10000000 / executionTime,
+  DamageValueBasePrint: (event, executionTime, dmg) =>
+    `${event.skill.id} - ${executionTime.toFixed(1)} - ${Messages.DamageValueRaw(dmg, executionTime).toFixed(2)}`,
+  DamageValueVerbosePrint: (event, executionTime, dmg) =>
+    `skillId: ${event.skill.id} - executionTime: ${executionTime.toFixed(1)} - DamageValue: ${Messages.DamageValueRaw(
+      dmg,
       executionTime
-    ).toFixed(2)} - Damage: ${dmg}`,
+    ).toFixed(2)} - Damage: ${(Number(dmg) / 1000000).toFixed(1)}M/s`,
   DamageValueTestLegend: `SkillId, AnimationTime, DamageValue`,
   DamageValueVerbooseEnabled: (enabled) => `Damage Value Tester verboose: ${enabled ? "enabled" : "disabled"}.`,
   DamageValueTest: (enabled) => `Damage Value Tester: ${enabled ? "enabled" : "disabled"}.`,
@@ -103,7 +80,7 @@ abdebug     - Toggle abnormalities debug mode`,
   FightTimerEnabled: (enabled) => `Fight timer: ${enabled ? "enabled" : "disabled"}.`,
   BurnReminderEnabled: (enabled) => `Burn reminder: ${enabled ? "enabled" : "disabled"}.`,
   FightDetailsAutoPaste: (enabled) => `Fight details auto paste: ${enabled ? "enabled" : "disabled"}.`,
-  FightDetails: () => `Fight ended and it last: ${fightTimer}.
+  FightDetails: (fightTimer, partyDps, personalDps) => `Fight ended and it last: ${fightTimer}.
 Party dps: ${partyDps}.
 Personal dps: ${personalDps}`,
   TrackedDebuffExpired: (eventId) =>
@@ -113,34 +90,38 @@ Personal dps: ${personalDps}`,
   TrackedAbnormalityActivated: (eventId) =>
     `<img src='img://abonormality__${eventId}' width='48' height='48' vspace='-7' /><font size="24">&nbsp;activated</font>`,
   BurnIn2: '<font size="24">Burn in 2..</font>',
-  FightTimer: () =>
+  FightTimer: (fightDurationInSeconds) =>
     `${Math.floor(fightDurationInSeconds / 60)}:${
       fightDurationInSeconds % 60 > 9 ? fightDurationInSeconds % 60 : "0" + String(fightDurationInSeconds % 60)
     }`,
-  PartyDPS: (event) => `${(Number(event.maxHp - event.curHp) / 1000000 / fightDurationInSeconds).toFixed(1)} M/s`,
-  PersonalDPS: () => `${(Number(personalDamageDone) / 1000000 / fightDurationInSeconds).toFixed(1)} M/s`,
-  PersonalDPSWithTimer: () => `${fightTimer}${" ".repeat(spacesInBetweenDpsAndTimer)}${personalDps}`,
+  PartyDPS: (event, fightDurationInSeconds) =>
+    `${(Number(event.maxHp - event.curHp) / 1000000 / fightDurationInSeconds).toFixed(1)} M/s`,
+  PersonalDPS: (personalDamageDone, fightDurationInSeconds) =>
+    `${(Number(personalDamageDone) / 1000000 / fightDurationInSeconds).toFixed(1)} M/s`,
+  PersonalDPSWithTimer: (fightTimer, personalDps) => `${fightTimer}${" ".repeat(13)}${personalDps}`,
   ModFeatureStatus: (switches) => `
 [${switches.dpsEnabled ? "Enabled" : "Disabled"}] DPS
 [${switches.dpsEnabledTimer ? "Enabled" : "Disabled"}] DPS Timer
 [${switches.burnMsgEnabled ? "Enabled" : "Disabled"}] Burn Message
-[${switches.dmgValueTestEnabled ? "Enabled" : "Disabled"}] Damage Value Test
-[${switches.abnormalitiesDebugEnabled ? "Enabled" : "Disabled"}] Abnormalities Debug
-[${switches.dmgValueTestVerboose ? "Enabled" : "Disabled"}] Damage Value Test Verbose
 [${switches.autoPasteFightDetailsInPartyChat ? "Enabled" : "Disabled"}] Auto Paste Fight Details
+[${switches.dmgValueTestEnabled ? "Enabled" : "Disabled"}] Damage Value Test
+[${switches.dmgValueTestVerboose ? "Enabled" : "Disabled"}] Damage Value Test Verbose
+[${switches.abnormalitiesDebugEnabled ? "Enabled" : "Disabled"}] Abnormalities Debug
 [${switches.hideAbnormalitiesEnabled ? "Enabled" : "Disabled"}] Hide Abnormalities`,
-  DPSValuesReset: "DPS Values Successfully Reset.",
-};
-
-const resetDps = (mod) => {
-  fightStartInSeconds = 0;
-  fightDurationInSeconds = 0;
-  personalDamageDone = 0;
-  personalDps = 0;
-  sendCustomStyleMessage(mod)(" ", ...Object.values(MessageTypes.PersonalDPS));
 };
 
 const abnormsHelpersMod = (mod) => {
+  const PlayerRoles = {
+    Tank: 0,
+    DPS: 1,
+    Healer: 2,
+  };
+
+  let playerRole = 2;
+
+  let trackedEnduranceDebuffTimeout;
+  let trackedEnduranceDebuffExpiredWarnings = 0;
+
   mod.game.me.on("change_zone", (zone, quick) => {
     switch (mod.game.me.class) {
       case "lancer":
@@ -230,6 +211,23 @@ const abnormsHideMod = (mod) => {
 };
 
 const dpsMeterMod = (mod) => {
+  let bossGameId;
+  let fightTimer;
+  let fightStartInSeconds = 0;
+  let fightEndInSeconds;
+  let fightDurationInSeconds = 0;
+  let personalDamageDone = 0;
+  let partyDps = "0 M/s";
+  let personalDps = "0 M/s";
+
+  const resetDps = (mod) => {
+    fightStartInSeconds = 0;
+    fightDurationInSeconds = 0;
+    personalDamageDone = 0;
+    personalDps = 0;
+    sendCustomStyleMessage(mod)(" ", ...Object.values(MessageTypes.PersonalDPS));
+  };
+
   // Fight Start && Party Dps Calc
   mod.hook("S_BOSS_GAGE_INFO", "*", (event) => {
     if (bossGameId != event.id) {
@@ -247,17 +245,20 @@ const dpsMeterMod = (mod) => {
 
       fightDurationInSeconds = timestampInSeconds - fightStartInSeconds;
 
-      partyDps = Messages.PartyDPS(event);
+      partyDps = Messages.PartyDPS(event, fightDurationInSeconds);
 
-      personalDps = Messages.PersonalDPS();
+      personalDps = Messages.PersonalDPS(personalDamageDone, fightDurationInSeconds);
 
-      fightTimer = Messages.FightTimer();
+      fightTimer = Messages.FightTimer(fightDurationInSeconds);
 
       if (fightDurationInSeconds == 0) break inFight;
 
       if (switches.dpsEnabled)
         if (switches.dpsEnabledTimer)
-          sendCustomStyleMessage(mod)(Messages.PersonalDPSWithTimer(), ...Object.values(MessageTypes.PersonalDPS));
+          sendCustomStyleMessage(mod)(
+            Messages.PersonalDPSWithTimer(fightTimer, personalDps),
+            ...Object.values(MessageTypes.PersonalDPS)
+          );
         else sendCustomStyleMessage(mod)(personalDps, ...Object.values(MessageTypes.PersonalDPS));
 
       if (switches.burnMsgEnabled)
@@ -286,10 +287,11 @@ const dpsMeterMod = (mod) => {
     fightEndInSeconds = timestampInSeconds;
     fightDurationInSeconds = fightEndInSeconds - fightStartInSeconds;
 
-    lastFightDetailsMsg = Messages.FightDetails();
+    lastFightDetailsMsg = Messages.FightDetails(fightTimer, partyDps, personalDps);
 
-    sendMsg(mod)(lastFightDetailsMsg, "FightInfos");
+    sendInGameCmdMessage(mod)(lastFightDetailsMsg);
     sendCustomStyleMessage(mod)(lastFightDetailsMsg, ...Object.values(MessageTypes.EndOfFight));
+
     if (switches.autoPasteFightDetailsInPartyChat) sendMsgInPartyChat(mod)(lastFightDetailsMsg);
 
     resetDps(mod);
@@ -297,6 +299,8 @@ const dpsMeterMod = (mod) => {
 };
 
 const smolDmgMod = (mod) => {
+  let players = {};
+
   mod.hook("S_SPAWN_USER", "*", (event) => {
     players[event.gameId] = true;
   });
@@ -319,37 +323,66 @@ const smolDmgMod = (mod) => {
 };
 
 const skillsDamageValueTester = (mod) => {
+  const damageValueTesterSkillsCast = {};
+  const report = {
+    averageDamageValues: {},
+    executions: {},
+    averageExecutionTimes: {},
+  };
+
   mod.hook("S_ACTION_STAGE", "*", { filter: { fake: null } }, (event) => {
-    if (!switches.dmgValueTestEnabled || !mod.game.me.is(event.gameId)) return;
+    if (!switches.dmgValueTestEnabled) return;
+    if (!mod.game.me.is(event.gameId)) return;
 
     if (damageValueTesterSkillsCast[event.skill.id] && damageValueTesterSkillsCast[event.skill.id].eventId != event.id)
       delete damageValueTesterSkillsCast[event.skill.id];
+
+    if (damageValueTesterSkillsCast[event.skill.id] && damageValueTesterSkillsCast[event.skill.id].eventId == event.id)
+      return;
 
     damageValueTesterSkillsCast[event.skill.id] = {
       eventId: event.id,
       startTimestamp: Date.now(),
     };
+
+    if (!report.executions[event.skill.id]) report.executions[event.skill.id] = 0;
+    report.executions[event.skill.id] += 1;
   });
 
   mod.hook("S_ACTION_END", "*", { filter: { fake: null } }, (event) => {
-    if (!switches.dmgValueTestEnabled || !mod.game.me.is(event.gameId)) return;
+    if (!switches.dmgValueTestEnabled) return;
+
+    if (!mod.game.me.is(event.gameId)) return;
 
     const { startTimestamp, damage } = damageValueTesterSkillsCast[event.skill.id];
 
-    const executionTime = Date.now() - startTimestamp;
+    const executionTime = (Date.now() - startTimestamp) / 1000;
 
     damageValueTesterSkillsCast[event.skill.id].executionTime = executionTime;
 
-    if (damage)
+    if (!report.averageExecutionTimes[event.skill.id]) report.averageExecutionTimes[event.skill.id] = 0;
+    report.averageExecutionTimes[event.skill.id] = (report.averageExecutionTimes[event.skill.id] + executionTime) / 2;
+
+    if (damage) {
       sendInGameCmdMessage(mod)(
         switches.dmgValueTestVerboose
-          ? Messages.DamageValueVerbose(event, executionTime, damage)
-          : Messages.DamageValueRaw(event, executionTime, damage)
+          ? Messages.DamageValueVerbosePrint(event, executionTime, damage)
+          : Messages.DamageValueBasePrint(event, executionTime, damage)
       );
+      if (!report.averageDamageValues[event.skill.id]) report.averageDamageValues[event.skill.id] = {};
+      const { previous, current } = report.averageDamageValues[event.skill.id];
+      report.averageDamageValues[event.skill.id] = {
+        previous: current,
+        current: current
+          ? (current + Messages.DamageValueRaw(damage, executionTime)) / 2
+          : Messages.DamageValueRaw(damage, executionTime),
+      };
+    }
   });
 
   mod.hook("S_EACH_SKILL_RESULT", "*", { order: 98 }, (event) => {
-    if (!switches.dmgValueTestEnabled || !mod.game.me.is(event.source)) return;
+    if (!switches.dmgValueTestEnabled) return;
+    if (!mod.game.me.is(event.source)) return;
 
     if (event.value > 0n && damageValueTesterSkillsCast[event.skill.id]) {
       const { executionTime, damage } = damageValueTesterSkillsCast[event.skill.id];
@@ -358,13 +391,34 @@ const skillsDamageValueTester = (mod) => {
 
       damageValueTesterSkillsCast[event.skill.id].damage = updatedDamage;
 
-      if (executionTime && updatedDamage)
+      if (executionTime && updatedDamage) {
         sendInGameCmdMessage(mod)(
           switches.dmgValueTestVerboose
-            ? Messages.DamageValueVerbose(event, executionTime, updatedDamage)
-            : Messages.DamageValueRaw(event, executionTime, updatedDamage)
+            ? Messages.DamageValueVerbosePrint(event, executionTime, updatedDamage)
+            : Messages.DamageValueBasePrint(event, executionTime, updatedDamage)
         );
+        const { previous, current } = report.averageDamageValues[event.skill.id];
+
+        report.averageDamageValues[event.skill.id] = {
+          previous: current,
+          current: (previous + Messages.DamageValueRaw(damage, executionTime)) / 2,
+        };
+      }
     }
+  });
+
+  mod.hook("S_DESPAWN_NPC", "*", (event) => {
+    if (!switches.dmgValueTestEnabled) return;
+    sendInGameCmdMessageFromObject(mod)({ name: "averageExecutionTimes", ...report.averageExecutionTimes });
+    sendInGameCmdMessageFromObject(mod)({ name: "executions", ...report.executions });
+
+    const aggregatedDamageValues = {};
+    for (const skill in report.averageDamageValues) {
+      if (Object.hasOwnProperty.call(report.averageDamageValues, skill)) {
+        aggregatedDamageValues[skill] = report.averageDamageValues[skill].current.toFixed(2);
+      }
+    }
+    sendInGameCmdMessageFromObject(mod)({ name: "aggregatedDamageValues", ...aggregatedDamageValues });
   });
 };
 
@@ -395,10 +449,6 @@ const loadCommands = (mod) => {
     burn: () => {
       switches.burnMsgEnabled = !switches.burnMsgEnabled;
       sendInGameCmdMessage(mod)(Messages.BurnReminderEnabled(switches.burnMsgEnabled));
-    },
-    reset: () => {
-      resetDps(mod);
-      sendInGameCmdMessage(mod)(Messages.DPSValuesReset);
     },
     autopaste: () => {
       switches.autoPasteFightDetailsInPartyChat = !switches.autoPasteFightDetailsInPartyChat;
