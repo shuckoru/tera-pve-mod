@@ -1,0 +1,35 @@
+{
+  "disableAutoUpdate": false,
+  "name": "pve-mod",
+  "author": "shuckoru",
+  "description": "PVE mod that helps with fighting things that move",
+  "version": "1.0",
+  "options": {
+    "cliName": "pve-mod",
+    "guiName": "pve-mod",
+    "reloadable": true
+  },
+  "conflicts": [
+    "auto-loot",
+    "achievement-tracker",
+    "skill-resets",
+    "hide-motes",
+    "tera-short-dmg-numbers",
+    "camera-control",
+    "Salt-remover",
+    "debug-logger",
+    "tera-swear-words",
+    "JustSpamF",
+    "anti-bodyblock",
+    "auto-cutscene",
+    "instant-exit",
+    "no-lockon",
+    "anywhere",
+    "NPC-summon",
+    "AFKer",
+    "yet-another-relog-mod",
+    "Auto-Accept-Negotiations",
+    "Auto-Guildquest"
+  ],
+  "servers": ["https://raw.githubusercontent.com/shuckoru/tera-pve-mod/master/"]
+}

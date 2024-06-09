@@ -1,0 +1,23 @@
+{
+  "name": "tera-pve-mod",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shuckoru/tera-pve-mod.git"
+  },
+  "author": "shuckoru",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shuckoru/tera-pve-mod/issues"
+  },
+  "homepage": "https://github.com/shuckoru/tera-pve-mod#readme",
+  "description": "",
+  "dependencies": {
+    "say": "^0.16.0",
+    "tera-mod-commons": "github:shuckoru/tera-mod-commons"
+  }
+}
