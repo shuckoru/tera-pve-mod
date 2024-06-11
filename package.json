@@ -17,6 +17,7 @@
   "homepage": "https://github.com/shuckoru/tera-pve-mod#readme",
   "description": "",
   "dependencies": {
+    "crypto": "^1.0.1",
     "say": "^0.16.0",
     "tera-mod-commons": "github:shuckoru/tera-mod-commons"
   }
