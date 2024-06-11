@@ -6,13 +6,7 @@ const path = require("path");
 const IGNORED_FILES = [
   "manifest.js",
   "manifest.json",
-  "manifest-generator.js",
-  "manifest-generator.bat",
-  "manifest-generator.exe",
-  "node.exe",
-  "LICENSE",
   "README.md",
-  "package.json",
   "module.config.json",
 ];
 
