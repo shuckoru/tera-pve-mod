@@ -1,4 +1,4 @@
 .env
-config/*.json
+config/config.json
 logs/*
 *.pem
