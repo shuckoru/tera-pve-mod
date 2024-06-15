@@ -18,6 +18,7 @@
   "description": "",
   "dependencies": {
     "crypto": "^1.0.1",
+    "lodash.merge": "^4.6.2",
     "say": "^0.16.0",
     "tera-mod-commons": "github:shuckoru/tera-mod-commons"
   }

@@ -1,0 +1,358 @@
+{
+  "version": 1,
+  "generalSettings": {},
+  "mods": {
+    "abhide": {
+      "enabled": true,
+      "settings": {
+        "blacklistedAbnormalities": {
+          "702000": "Joy of party?",
+          "999001018": "Joy of partying",
+          "999001020": "Joy of partying",
+          "999001021": "Joy of partying",
+          "4833": "Bravery",
+          "922": "Noctenium",
+          "4401": "Greetifffng",
+          "70254": "Darkroot Beer",
+          "5020003": "Complete Crystalbind",
+          "81000021": "30 mins useless prob",
+          "5020019": "30 mins useless prob",
+          "8000156": "30 mins useless prob",
+          "5020017": "30 mins useless prob",
+          "8000089": "30 mins uselfess prob",
+          "8000079": "100% Reputation Boost",
+          "8000093": "100% Quester's Gold Boost",
+          "5020005": "30 mins useless prob",
+          "99020020": "Vanguard Valor",
+          "860029": "30 mins useless prob",
+          "70244": "Hotfish Buffet",
+          "70366": "Clover's Luck",
+          "60032": "Mana regen bs",
+          "6004": "Blazing Aura",
+          "10153150": "Brawler Quick Dash",
+          "31140": "Brawler Pyledriver",
+          "81123001": "Brawler Combat Speed buff",
+          "10153052": "Brawler Pounding Rage",
+          "10153061": "Brawler Pounding Rage",
+          "10153110": "Brawler Mounting Rage",
+          "10153510": "Brawler Concentrate",
+          "10153507": "Brawler Concentrate",
+          "15164": "Brawler Concentrate",
+          "10153050": "Brawler Overwhelming Rage",
+          "78100017": "Brawler Overwhelming Rage",
+          "10153051": "Brawler Self Control",
+          "10153530": "Brawler Self Control",
+          "10153540": "Brawler Haymaker Accelleration",
+          "10153000": "Brawler Ready to Counterpunch",
+          "10153044": "Brawler TEST",
+          "690131": "Brawler Haymaker party buff",
+          "31100": "Brawler useless Growing Fury",
+          "806021": "Priest",
+          "806103": "Priest",
+          "806023": "Priest rejuvenation circle",
+          "800108": "Priest",
+          "806020": "Priest",
+          "800950": "Priest",
+          "801401": "Priest",
+          "81120320": "Priest",
+          "806104": "Priest",
+          "801510": "Priest",
+          "801503": "Priest Energy Star",
+          "805713": "Priest Divine Charge",
+          "805700": "Priest fake Divine Charge",
+          "88728206": "Priest Constant recharge Glyph",
+          "806260": "Priest buff",
+          "805102": "Priest buff",
+          "801700": "Priest heal?",
+          "200232": "Lancer Guardian Power",
+          "702012": "Mystic Arun's Breath",
+          "690132": "Mystic Arun's breath",
+          "700409": "Mystic Arun's breath",
+          "701606": "Mystic Warding Totem",
+          "702122": "Mystic Warding Totem",
+          "702123": "Mystic Warding Totem",
+          "700300": "Mystic MP Aura",
+          "700631": "Mystic Crit Aura",
+          "603": "Mystic Crit Aura",
+          "700330": "Mystic MP Aura",
+          "702200": "Mystic Amplified Healing",
+          "27161": "Mystic Major Restoration glyph",
+          "701012": "Mystic Thrall of life glyph",
+          "10152203": "Mystic Thrall of life glyph",
+          "702121": "Mystic Thrall of life glyph",
+          "702002": "Mystic Thrall of life glyph",
+          "702003": "Mystic Blue buff",
+          "3012022": "Mystic Endurance glyph",
+          "27120": "Mystic Endurance glyph",
+          "3012021": "Mystic vow",
+          "3012020": "Mystic vow",
+          "151641": "idk but looks useless",
+          "690280": "idk but looks useless",
+          "690297": "idk but looks useless",
+          "3012030": "idk but looks useless",
+          "806022": "holy burst",
+          "28100": "kaia healing glyph",
+          "81123115": "tov glyph",
+          "27140": "mystic balls",
+          "701590": "mystic balls",
+          "1015220": "mystic balls",
+          "1015250": "mystic balls",
+          "1015230": "mystic balls",
+          "700233": "mystic crit resist aura",
+          "1530": "blue pot",
+          "700021": "mounting rage",
+          "10153062": "nostrum",
+          "4030": "nostrum",
+          "320600243": "growing fury",
+          "320600241": "growing fury",
+          "10153040": "growing fury",
+          "10153041": "growing fury",
+          "10153043": "growing fury",
+          "3012001": "red divine charge priest",
+          "7020003": "blue buff mystic",
+          "3012011": "blue buff mystic",
+          "6001": "1.5 dragon",
+          "690061": "valks moon warrior blessing",
+          "81121105": "absorb shield priest glyph",
+          "10153561": "dps stance brawler",
+          "103130": "warrior shadow of the tempest I",
+          "103120": "warrior tempest aura",
+          "102800": "warrior tempest aura",
+          "103131": "warrior tempest aura II summon avatar",
+          "103104": "warrior tempst shadow",
+          "88120120": "warrior desperate force",
+          "400301": "zerk speed buff",
+          "24200": "zerk glyph chained something",
+          "24181": "glyph of powerlink axe counter",
+          "91900407": "zerk ts charge dmg reduction",
+          "24120": "zerk glyph of blaze lethal",
+          "24130": "zerk glyph of blaze thunder strike",
+          "24170": "zerk glyph of blaze thunder strike",
+          "24190": "zerk glyph of powerlink cyclone",
+          "91900403": "zerk raging fury aura release",
+          "401704": "zerk Bloodshed",
+          "401719": "Eye of the Storm (Cancel)",
+          "401720": "Eye of the Storm (Counter)",
+          "401721": "Eye of the Storm I",
+          "401722": "Eye of the Storm II",
+          "401723": "Eye of the Storm III",
+          "401724": "Eye of the Storm IV",
+          "401725": "Eye of the Storm V",
+          "401726": "Eye of the Storm I",
+          "401727": "Eye of the Storm II",
+          "401728": "Eye of the Storm III",
+          "400105": "zerk Fiery Rage VI",
+          "14011": "pet fellowship III"
+        }
+      }
+    },
+    "achiv": {
+      "enabled": true,
+      "settings": {
+        "achievementTrackerTbMsgEnabled": true
+      }
+    },
+    "afk": {
+      "enabled": true,
+      "settings": {}
+    },
+    "bb": {
+      "enabled": true,
+      "settings": {}
+    },
+    "csskip": {
+      "enabled": true,
+      "settings": {}
+    },
+    "autovg": {
+      "enabled": true,
+      "settings": {
+        "Vanguard": true,
+        "VLog": false,
+        "GQuest": true,
+        "Guardian": true,
+        "Daily": true,
+        "battleground": [102, 103, 110, 111, 112, 116, 117, 118, 119]
+      }
+    },
+    "bnotify": {
+      "enabled": true,
+      "settings": {
+        "burnNotifyEnabled": true,
+        "debuffReminderEnabled": true,
+        "trackedAbnormalities": {
+          "10153141": {
+            "icon": "Icon_Skills.Ribbreaker_Tex",
+            "name": "Internal Wounds"
+          },
+          "200701": {
+            "icon": "Icon_Skills.fightingwill_Tex",
+            "name": "Lancer Arush"
+          },
+          "702004": {
+            "icon": "Icon_Skills.summonspiritofattack2_Tex",
+            "name": "Mystic 1min buff"
+          },
+          "27160": {
+            "icon": "Icon_Skills.breakmagicaldef_tex",
+            "name": "Mystic Endurance Debuff",
+            "supportDebuff": true
+          },
+          "805802": {
+            "icon": "Icon_Skills.Judgment_Tex",
+            "name": "Priest Edict for self"
+          },
+          "28090": {
+            "icon": "Icon_Skills.breakmagicaldef_tex",
+            "name": "Priest Endurance Debuff",
+            "supportDebuff": true
+          },
+          "10153140": {
+            "icon": "Icon_Skills.breakphysicaldef_tex",
+            "name": "Brawler Tank Debuff",
+            "tankDebuff": true,
+            "needsTankAbnorm": true
+          },
+          "101210": {
+            "icon": "Icon_Skills.breakphysicaldef_tex",
+            "name": "Warrior Tank Debuff",
+            "tankDebuff": true,
+            "needsTankAbnorm": true
+          },
+          "200302": {
+            "icon": "Icon_Skills.BreakPhysicalDef_Tex",
+            "name": "Lancer Debuff",
+            "tankDebuff": true
+          },
+          "401500": {
+            "icon": "Icon_Skills.UpperSlashCombo_Tex",
+            "name": "Zerk Punishing Strike",
+            "tankDebuff": true,
+            "needsTankAbnorm": true
+          },
+          "401800": {
+            "icon": "Icon_Skills.bash_Tex",
+            "name": "Zerk Flatten",
+            "tankDebuff": true,
+            "needsTankAbnorm": true
+          }
+        }
+      }
+    },
+    "autonegotiate": {
+      "enabled": true,
+      "settings": {
+        "unattendedManualNegotiate": true,
+        "actionDelayTimeoutMs": [10000, 20000],
+        "actionDelayTimeoutShortMs": [5000, 10000],
+        "actionDelayLongMs": [3000, 5000],
+        "actionDelayShortMs": [1000, 3000],
+        "delayActions": true,
+        "autoRejectThreshold": 50,
+        "autoRejectChance": 10,
+        "autoRejectTrolls": 150,
+        "autoAcceptThreshold": 90,
+        "typeNegotiationPending": 30,
+        "typeNegotiation": 31
+      }
+    },
+    "camera": {
+      "enabled": false,
+      "settings": {
+        "cameraFovEnabled": true,
+        "cameraFovValue": 100,
+        "cameraFovRefreshInterval": 250,
+        "cameraDistanceEnabled": true,
+        "cameraDistanceValue": 600,
+        "cameraShakeEnabled": false
+      }
+    },
+    "debug": {
+      "enabled": false,
+      "settings": {
+        "blacklistedAbnormalities": {}
+      }
+    },
+    "fastexit": {
+      "enabled": true,
+      "settings": {}
+    },
+    "fstats": {
+      "enabled": true,
+      "settings": {
+        "startFightOnFirstDmgHit": true,
+        "liveDpsMeterEnabled": false,
+        "personalDpsEnabled": true,
+        "timerEnabled": true,
+        "autoPasteDpsInPartyChatEnabled": false,
+        "fightStartNotifyEnabled": true,
+        "burnReminderEnabled": true
+      }
+    },
+    "style": {
+      "enabled": true,
+      "settings": {}
+    },
+    "hidemotes": {
+      "enabled": false,
+      "settings": {}
+    },
+    "jsf": {
+      "enabled": true,
+      "settings": {}
+    },
+    "loot": {
+      "enabled": true,
+      "settings": {
+        "autoLootEnabled": true,
+        "quickLootEnabled": true
+      }
+    },
+    "lockonyou": {
+      "enabled": false,
+      "settings": {}
+    },
+    "npc": {
+      "enabled": true,
+      "settings": {}
+    },
+    "yarm": {
+      "enabled": true,
+      "settings": {}
+    },
+    "safechat": {
+      "enabled": false,
+      "settings": {
+        "playersPublicKeys": {}
+      }
+    },
+    "salt": {
+      "enabled": true,
+      "settings": {}
+    },
+    "sresets": {
+      "enabled": true,
+      "settings": {
+        "skillsResetShowSystemResetMsg": false,
+        "skillsResetMsgStyle": 51,
+        "skillsResetFontColor": "#FF4500",
+        "skillsResetPlaySound": false,
+        "skillsResetSoundId": 3028
+      }
+    },
+    "smoldmg": {
+      "enabled": true,
+      "settings": {}
+    },
+    "swearw": {
+      "enabled": true,
+      "settings": {}
+    },
+    "tl": {
+      "enabled": true,
+      "settings": {
+        "applyInspectEnabled": true
+      }
+    }
+  }
+}
