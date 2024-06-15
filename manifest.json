@@ -87,6 +87,7 @@
 		"src/mods/style.js": "c20d23164c74d9e53520cd33a23191d1f09d8423eebfc313ff62543cde94e19e",
 		"src/mods/swearw.js": "0c295e98c1870a1c217d565ea0fe0c7373c87e0edfaa8ef83fa4b4a5e9480556",
 		"src/mods/tl.js": "fc875431b1a9b0ea1c8cc6910bc4ef2f25714da25bfd97ceaa78574d2a4cbfb5",
-		"src/utils.js": "df50aaf7f72bead60249f24c9d1d8a88ece6dfb7fb297270289307f7cee7571e"
+		"src/utils.js": "df50aaf7f72bead60249f24c9d1d8a88ece6dfb7fb297270289307f7cee7571e",
+		"config/migrations.json": "753af7c37864132a984213a1a184ce36c3fc7dc8701884616a754bc9725474b1"
 	}
 }
