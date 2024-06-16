@@ -81,9 +81,12 @@ const loadConfig = () => {
   return merge({}, defaultConfig, userConfig);
 };
 
-const updateConfig = (config) => {
+const updateModConfig = (modName, updatedModConfig) => {
   const filePath = path.join(__dirname, "../config/config.json");
+
   try {
+    const config = loadConfig();
+    config.mods[modName] = updatedModConfig;
     fs.writeFileSync(filePath, JSON.stringify(config, null, 2), "utf8");
   } catch (error) {
     console.error(`Failed to update config:`, error);
@@ -92,5 +95,5 @@ const updateConfig = (config) => {
 
 module.exports = {
   loadConfig,
-  updateConfig,
+  updateModConfig,
 };

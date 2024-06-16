@@ -1,3 +1,5 @@
+const { updateModConfig } = require("../config");
+
 class BaseMod {
   Name;
   Description;
@@ -24,11 +26,13 @@ class BaseMod {
 
   toggleEnabledSettings(configKey) {
     this.Config.settings[configKey] = !this.Config.settings[configKey];
+    updateModConfig(this.constructor.Name, this.Config);
     this.sendEnabledMsg(configKey, this.Config.settings[configKey]);
   }
 
   toggleEnableMod() {
     this.Config.enabled = !this.Config.enabled;
+    updateModConfig(this.constructor.Name, this.Config);
     this.sendEnabledMsg(`${this.constructor.Name} mod`, this.Config.enabled);
   }
 
@@ -39,7 +43,10 @@ class BaseMod {
       );
       return;
     }
+    if (!isNaN(value)) value = Number(value);
+
     this.Config.settings[settingsKey] = value;
+    updateModConfig(this.constructor.Name, this.Config);
     this.cmdMsg(`${settingsKey} updated with value: ${value}`);
   }
 }
