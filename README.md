@@ -1,6 +1,6 @@
 # Tera PVE Mod
 
-This module is designed to provide various utilities for pve content in the game TERA.
+This module is designed to provide various QoL improvements, especially for pve content, in the game TERA.
 
 No SP manipulation of any kind is, nor will it ever be, present in this mod. These mods are not intended to give the player any advantage whatsoever, they're all just useful QoL improvements.
 
@@ -16,16 +16,11 @@ The default settings experience with this mod should never cause you any issues.
 1. clone the repo in /mods folder of toolbox
 2. launch the game
 
-Note: `/node_modules` sadly needs to be pushed in the repo because tera-toolbox doesn't support installing dependencies automatically.
-
 ## Usage
 
 The module provides several commands that can be used in the game. Find the updated list using '/8 help' command in game.
 
 Eventually I will introduce a gui to adjust all of these settings. Stay tuned for that.
-
-Note:  
-This mod listens to updates on the config files so that restarting the mod is not required on every update to the config files. If you want to modify these files manually, just do so and save.
 
 ## Features
 
