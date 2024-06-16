@@ -40,7 +40,6 @@ class SafeChatMod extends BaseMod {
 
   constructor(mod, config) {
     super(mod, config);
-    this.cmdMsg = (msg) => mod.command.message(msg);
 
     this.Hooks = {
       C_WHISPER: {
@@ -50,7 +49,7 @@ class SafeChatMod extends BaseMod {
       },
       S_WHISPER: {
         version: "*",
-        position: -Infinity,
+        position: Infinity,
         handler: (event) => this.handleIncomingWhisper(event),
       },
     };
@@ -101,7 +100,7 @@ class SafeChatMod extends BaseMod {
         this.mod.game.me.name &&
         event.name.toLowerCase() != this.mod.game.me.name.toLowerCase()
       )
-        this.sendPublicKey(event.recipient);
+        this.sendPublicKey(event.name);
       return false;
     }
 
