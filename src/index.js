@@ -1,4 +1,4 @@
-const { loadConfig, updateConfig } = require("./config");
+const { loadConfig, updateGeneralSettings } = require("./config");
 const { getHookOptions, extractMods } = require("./utils");
 
 class PVEMod {
@@ -121,10 +121,11 @@ class PVEMod {
       return;
     }
 
-    this.Config.disabledMods = this.Config.disabledMods || [];
-    if (!this.Config.disabledMods.includes(modName)) {
-      this.Config.disabledMods.push(modName);
-      updateConfig(this.Config);
+    this.Config.generalSettings.disabledMods =
+      this.Config.generalSettings.disabledMods || [];
+    if (!this.Config.generalSettings.disabledMods.includes(modName)) {
+      this.Config.generalSettings.disabledMods.push(modName);
+      updateGeneralSettings(this.Config.generalSettings);
       this.dispatch.command.message(
         `Mod ${modName} has been disabled. Reload pve-mod or the toolbox to see changes.`
       );
@@ -139,7 +140,6 @@ class PVEMod {
   }
 
   destructor() {
-    updateConfig(this.Config);
     this.unloadMods();
   }
 }
