@@ -1,12 +1,12 @@
 {
   "disableAutoUpdate": false,
-  "name": "pve-mod",
+  "name": "pve-mod-beta",
   "author": "shuckoru",
   "description": "Collection of QoL mods that help fighting things that move",
   "version": "1.0",
   "options": {
-    "cliName": "pve-mod",
-    "guiName": "Shuckol's PVE Mods",
+    "cliName": "pve-mod-beta",
+    "guiName": "(Beta) Shuckol's PVE Mods",
     "reloadable": true
   },
   "conflicts": [
@@ -31,8 +31,6 @@
     "Auto-Accept-Negotiations",
     "Auto-Guildquest"
   ],
-  "servers": [
-    "https://raw.githubusercontent.com/shuckoru/tera-pve-mod/master/"
-  ],
+  "servers": ["https://raw.githubusercontent.com/shuckoru/tera-pve-mod/beta/"],
   "supportUrl": "https://github.com/shuckoru/tera-pve-mod/issues"
 }
