@@ -31,7 +31,7 @@ class AutoCutSceneMod extends BaseMod {
   }
 
   handlePlayMovie(event) {
-    if (this.Config.settings.skipCutSceneEnabled) {
+    if (this.Config.enabled) {
       this.mod.send("C_END_MOVIE", "*", { ...event, unk: 1 });
       return false;
     }
