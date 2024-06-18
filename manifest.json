@@ -63,7 +63,7 @@
 		"src/mods/base.js": "c323b06171744c6a0301f6f96f33d233ed7ad99d0fe99575ceee3f1f4b7408a5",
 		"src/mods/bb.js": "6c61a52babe9d8549ae2a4f2209a4b0138259e4535949e79ae568f7299a119ee",
 		"src/mods/bnotify.js": "4b30f7ebe080a236bfd4f54c3a3c5235a097e19b0f0e0871eedf2e2d4afc0f9c",
-		"src/mods/csskip.js": "c3291b49a218fb60b3af3acf2a041380a2f96eb31dec6b2e77440c45d0faa025",
+		"src/mods/csskip.js": "aed1d78add95230d4772ef7cf993e63f17fac2023922dbd61f0e1a043897f744",
 		"src/mods/debug.js": "2937e6e46c520d694c1a87fd80bc6b57ca3112dceb147036af54e3478a8f8cc0",
 		"src/mods/fastexit.js": "09ab84e2f12871f196d5ebf55da0f42ca690d6bd74751946ee51a5ad38dd1256",
 		"src/mods/fstats.js": "06fc77257c7ecba77915fd85e867449730195f3af7d788383b6f9707a32c2f33",
