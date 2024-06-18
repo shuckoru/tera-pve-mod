@@ -61,12 +61,9 @@ class SafeChatMod extends BaseMod {
   }
 
   handleOutgoingWhisper(event) {
-    event.message = event.message.replace(
-      /<FONT>(.*?)<\/FONT>/g,
-      "<FONT></FONT>$1"
-    );
+    event.message = this.swearWordsFix(event.message);
 
-    const msg = event.message.replace("<FONT>", "").replace("</FONT>", "");
+    const msg = event.message;
 
     if (
       !this.Config.enabled ||
@@ -103,16 +100,17 @@ class SafeChatMod extends BaseMod {
     }
   }
 
+  swearWordsFix(message) {
+    return message.replace(/<FONT>(.*?)<\/FONT>/g, "<FONT></FONT>$1");
+  }
+
   handleIncomingWhisper(event) {
-    event.message = event.message.replace(
-      /<FONT>(.*?)<\/FONT>/g,
-      "<FONT></FONT>$1"
-    );
+    event.message = this.swearWordsFix(event.message);
 
     const sender = event.name.toLowerCase();
     const receiver = event.recipient.toLowerCase();
 
-    const msg = event.message.replace("<FONT>", "").replace("</FONT>", "");
+    const msg = event.message;
 
     if (msg.startsWith(this.PublicKeyResponseIdentifier)) {
       if (!this.isMe(sender)) {
@@ -135,6 +133,8 @@ class SafeChatMod extends BaseMod {
       if (this.isMe(sender)) return false;
 
       event.message = this.decryptMessage(event.message);
+
+      event.message = this.swearWordsFix(event.message);
 
       if (this.isMessageEncrypted(event.message)) {
         event.message =
