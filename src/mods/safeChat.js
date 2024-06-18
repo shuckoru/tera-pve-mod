@@ -105,8 +105,6 @@ class SafeChatMod extends BaseMod {
   }
 
   handleIncomingWhisper(event) {
-    event.message = this.swearWordsFix(event.message);
-
     const sender = event.name.toLowerCase();
     const receiver = event.recipient.toLowerCase();
 
@@ -133,8 +131,6 @@ class SafeChatMod extends BaseMod {
       if (this.isMe(sender)) return false;
 
       event.message = this.decryptMessage(event.message);
-
-      event.message = this.swearWordsFix(event.message);
 
       if (this.isMessageEncrypted(event.message)) {
         event.message =
