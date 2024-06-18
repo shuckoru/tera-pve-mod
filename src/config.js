@@ -95,7 +95,6 @@ const updateModConfig = (modName, updatedModConfig) => {
 
 const updateGeneralSettings = (updatedGeneralSettings) => {
   const filePath = path.join(__dirname, "../config/config.json");
-
   try {
     const config = loadConfig();
     config.generalSettings = updatedGeneralSettings;

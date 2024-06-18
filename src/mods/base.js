@@ -32,10 +32,6 @@ class BaseMod {
 
   toggleEnableMod() {
     this.Config.enabled = !this.Config.enabled;
-    if (this.Config.enabled)
-      this.cmdMsg(
-        "This feature is currently unstable and in BETA. Use is not adviced yet."
-      );
     updateModConfig(this.constructor.Name, this.Config);
     this.sendEnabledMsg(`${this.constructor.Name} mod`, this.Config.enabled);
   }
