@@ -19,7 +19,7 @@ const Messages = {
 class YARMMod extends BaseMod {
   static Version = 1;
 
-  static Name = "YARM";
+  static Name = "relog";
   Description = "Yet Another Relog Mod";
 
   Hooks = {};

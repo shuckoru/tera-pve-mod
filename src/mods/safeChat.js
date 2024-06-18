@@ -2,6 +2,7 @@ const BaseMod = require("./base");
 const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
+const { updateModConfig } = require("../config");
 
 const Messages = {
   EncryptionEnabled: (enabled) =>
@@ -18,8 +19,7 @@ const Messages = {
 <font color="#56B4E9">safechat</font>: Enable/Disable whisper encryption.
 <font color="#56B4E9">add [player]</font>: Exchange public keys with a player.
 <font color="#56B4E9">help</font>: Show this help message.`,
-  CannotRequestPublicKeyWhenDisabled:
-    "Encryption disabled. Cannot request public key.",
+
   PublicKeyRequestSent: (recipient) =>
     `Public key request sent to ${recipient}.`,
   PublicKeyReceived: (sender) => `Public key received from ${sender}.`,
@@ -31,7 +31,6 @@ class SafeChatMod extends BaseMod {
 
   static Name = "safechat";
   Description = "Send and receive private messages using end-to-end encryption";
-  Config = { playersPublicKeys: {} };
   Hooks = {};
   Commands = null;
   EncryptedMessageIdentifier = "EMsg: ";
@@ -62,17 +61,19 @@ class SafeChatMod extends BaseMod {
   }
 
   handleOutgoingWhisper(event) {
-    if (this.Config.enabled) console.log(event);
-    const msg = event.message.replace("<FONT>", "").replace("</FONT>", "");
+    event.message = this.swearWordsFix(event.message);
+
+    const msg = event.message;
 
     if (
       !this.Config.enabled ||
+      msg.startsWith(this.PublicKeyResponseIdentifier) ||
       msg.startsWith(this.PublicKeyRequestIdentifier) ||
       msg.startsWith(this.EncryptedMessageIdentifier)
     )
       return;
 
-    if (event.target.toLowerCase() in this.Config.playersPublicKeys) {
+    if (event.target.toLowerCase() in this.Config.settings.playersPublicKeys) {
       const encryptedMessage = this.encryptMessage(
         msg,
         event.target.toLowerCase()
@@ -81,38 +82,59 @@ class SafeChatMod extends BaseMod {
       if (this.isMessageEncrypted(encryptedMessage)) {
         event.message = encryptedMessage;
         this.mod.send("C_WHISPER", "*", event);
+
+        const localWhisperEvent = {
+          gameId: this.mod.game.me.gameId,
+          isWorldEventTarget: false,
+          gm: false,
+          founder: false,
+          name: this.mod.game.me.name,
+          recipient: `(Safe)${event.target}`,
+          message: msg,
+        };
+
+        this.mod.send("S_WHISPER", "*", localWhisperEvent);
+
         return false;
       }
     }
   }
 
+  swearWordsFix(message) {
+    return message.replace(/<FONT>(.*?)<\/FONT>/g, "<FONT></FONT>$1");
+  }
+
   handleIncomingWhisper(event) {
     const sender = event.name.toLowerCase();
-    // const receiver = event.recipient.toLowerCase();
+    const receiver = event.recipient.toLowerCase();
 
-    if (this.Config.enabled) console.log(event);
-    const msg = event.message.replace("<FONT>", "").replace("</FONT>", "");
+    const msg = event.message;
 
     if (msg.startsWith(this.PublicKeyResponseIdentifier)) {
       if (!this.isMe(sender)) {
         const [_, senderPublicKey] = msg.split(" ");
         this.addPublicKey(sender, senderPublicKey);
-        this.cmdMsg(Messages.PublicKeyReceived(sender));
       }
       return false;
     }
 
     if (msg.startsWith(this.PublicKeyRequestIdentifier)) {
-      if (!this.isMe(sender)) this.sendPublicKey(sender);
+      if (!this.isMe(sender)) {
+        this.sendPublicKey(sender);
+        if (!(sender in this.Config.settings.playersPublicKeys))
+          this.requestPublicKey(sender);
+      }
       return false;
     }
 
     if (this.Config.enabled && this.isMessageEncrypted(event.message)) {
-      event.message = this.decryptMessage(event.message, sender);
+      if (this.isMe(sender)) return false;
+
+      event.message = this.decryptMessage(event.message);
 
       if (this.isMessageEncrypted(event.message)) {
         event.message =
-          "Sender tried to send an encrypted message but decryption failed.";
+          "Sender tried to send an encrypted message but decryption failed. Make sure they have your updated keys.";
         this.mod.send("S_WHISPER", "*", event);
       } else {
         event.name = "(Safe)" + event.name;
@@ -123,7 +145,9 @@ class SafeChatMod extends BaseMod {
   }
 
   addPublicKey(name, key) {
-    this.Config.playersPublicKeys[name.toLowerCase()] = key;
+    this.Config.settings.playersPublicKeys[name.toLowerCase()] = key;
+    updateModConfig(this.constructor.Name, this.Config);
+    this.cmdMsg(Messages.PublicKeyReceived(name));
   }
 
   isMe(name) {
@@ -134,7 +158,8 @@ class SafeChatMod extends BaseMod {
     // just in case
     target = target.toLowerCase();
 
-    const targetPublicKey = this.Config.playersPublicKeys[target];
+    const targetPublicKey = this.Config.settings.playersPublicKeys[target];
+
     if (!targetPublicKey) {
       this.cmdMsg(
         `Public key for ${target} not found. Please exchange keys first.`
@@ -185,22 +210,8 @@ class SafeChatMod extends BaseMod {
     }
   }
 
-  decryptMessage(message, sender) {
-    // just in case
-    sender = sender.toLowerCase();
-
+  decryptMessage(message) {
     if (!message.startsWith(this.EncryptedMessageIdentifier)) return message;
-
-    const senderPublicKey = this.isMe(sender)
-      ? this.publicKey
-      : this.Config.playersPublicKeys[sender];
-
-    if (!senderPublicKey) {
-      this.cmdMsg(
-        `Public key for ${sender} not found. Cannot decrypt message.`
-      );
-      return message;
-    }
 
     try {
       const encryptedDataAlphanumeric = message.replace(
@@ -284,8 +295,6 @@ class SafeChatMod extends BaseMod {
   }
 
   requestPublicKey(player) {
-    if (!this.Config.enabled)
-      return this.cmdMsg(Messages.CannotRequestPublicKeyWhenDisabled);
     const requestMessage = `${this.PublicKeyRequestIdentifier}${this.mod.game.me.name} is requesting a safe chat connection.`;
     this.mod.send("C_WHISPER", "*", {
       message: requestMessage,
