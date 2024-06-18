@@ -39,7 +39,7 @@
 		"src/mods/relog.js": "9abb51d6c779ad5968508792bfc880c96f369f64d144eca85a49a9924a9b30a8",
 		"src/mods/skillResets.js": "b63fab5adb33de295fa1f2171d01a352ab44bb21189be69a6e9e5b6674d76d86",
 		"src/mods/smoldmg.js": "0da134c6448a9dd9d55c361a47370df91ef84215be1d5cbacf4d797097e7ec0a",
-		"src/mods/safeChat.js": "77cecba242c6aa3a8190f1b7c7caf63e9e3f87aaff7f3f5bb13c75392ca0e109",
+		"src/mods/safeChat.js": "68ead729009090a8ff6ee21926774ea369cf13567fc586cd2a5d4bff32979e17",
 		"LICENSE": "a81cda37331c1f405ae39183ab5232f6bf7042076f1b877e94550cfe869cb814",
 		"node_modules/clone/LICENSE": "3fb0857ef0133928cf72c88dfc464e931486e88778961eedec25585e2321507f",
 		"node_modules/clone/package.json": "07e9c7efd55a99cbe2909d1fd46b032b67cba6b493d1fbc974fddf4f2adebc83",
