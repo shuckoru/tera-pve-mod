@@ -87,8 +87,11 @@ class PVEMod {
       this.dispatch.command.message(`Installed Mods:\n${modsList}`);
     });
 
-    this.dispatch.command.remove("disable");
-    this.dispatch.command.add("disable", this.disabledMod.bind(this));
+    this.dispatch.command.remove("uninstall");
+    this.dispatch.command.add("uninstall", this.uninstallMod.bind(this));
+
+    this.dispatch.command.remove("install");
+    this.dispatch.command.add("install", this.installMod.bind(this));
   }
 
   unloadMods() {
@@ -108,7 +111,7 @@ class PVEMod {
     this.mods = {};
   }
 
-  disabledMod(modName) {
+  uninstallMod(modName) {
     if (!modName) {
       this.dispatch.command.message("Please specify a mod name to disable.");
       return;
@@ -121,17 +124,48 @@ class PVEMod {
       return;
     }
 
-    this.Config.generalSettings.disabledMods =
-      this.Config.generalSettings.disabledMods || [];
-    if (!this.Config.generalSettings.disabledMods.includes(modName)) {
-      this.Config.generalSettings.disabledMods.push(modName);
+    this.Config.generalSettings.uninstalledMods =
+      this.Config.generalSettings.uninstalledMods || [];
+    if (!this.Config.generalSettings.uninstalledMods.includes(modName)) {
+      this.Config.generalSettings.uninstalledMods.push(modName);
       updateGeneralSettings(this.Config.generalSettings);
       this.dispatch.command.message(
-        `Mod ${modName} has been disabled. Reload pve-mod or the toolbox to see changes.`
+        `Mod ${modName} has been added to the uninstalled list. Reload pve-mod or the toolbox to see changes.`
       );
     } else {
-      this.dispatch.command.message(`Mod ${modName} is already disabled.`);
+      this.dispatch.command.message(
+        `Mod ${modName} is already in the uninstalled list.`
+      );
     }
+  }
+
+  installMod(modName) {
+    if (!modName) {
+      this.dispatch.command.message("Please specify a mod name to install.");
+      return;
+    }
+
+    const installedMods = Object.keys(this.mods).map((modName) => modName);
+    const uninstalledMods = this.Config.generalSettings.uninstalledMods || [];
+    const indexOfModToInstall = uninstalledMods.indexOf(modName);
+
+    if (installedMods.includes(modName)) {
+      this.dispatch.command.message(`Mod ${modName} is already installed.`);
+      return;
+    }
+
+    if (indexOfModToInstall == -1) {
+      this.dispatch.command.message(`Mod ${modName} does not exist.`);
+      return;
+    }
+
+    this.Config.generalSettings.uninstalledMods.splice(indexOfModToInstall, 1);
+
+    updateGeneralSettings(this.Config.generalSettings);
+
+    this.dispatch.command.message(
+      `Mod ${modName} is going to be installed with next restart.`
+    );
   }
 
   reloadMods() {

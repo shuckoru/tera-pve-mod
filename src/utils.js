@@ -71,6 +71,8 @@ const extractMods = (dispatch, config) => {
   const debug = config.generalSettings?.debug || false;
   const modsDirectory = path.join(__dirname, "mods");
 
+  const modsToNotInstall = config.generalSettings.uninstalledMods || [];
+
   const modFiles = fs.readdirSync(modsDirectory);
 
   const mods = {};
@@ -80,7 +82,7 @@ const extractMods = (dispatch, config) => {
     try {
       const Mod = require(filePath);
       const modInstance = new Mod(dispatch, config);
-      mods[Mod.Name] = modInstance;
+      if (!modsToNotInstall.includes(Mod.Name)) mods[Mod.Name] = modInstance;
     } catch (error) {
       if (debug) console.log(`Error importing: ${filePath}`);
       console.error(error);
