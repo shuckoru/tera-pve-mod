@@ -28,7 +28,7 @@
 		"node_modules/tera-mod-commons/index.js": "46f7b5c0f8ca60fd316c0a0153a337b9d818ccd0c6f1fa40574c105183e1b9c2",
 		"package-lock.json": "dec40ab6405aeb0f5ada266ca6f8906ed5348e502208b42493633fa7cba8198b",
 		"src/config.js": "05dcabd8c2193b907c55f9189e1630b554058b405c69cddd698b2f69b41d7dc3",
-		"src/index.js": "549fda9a0320b33ce36251d9317d381424c3deefcd393bff3b71533418acbf95",
+		"src/index.js": "194fa81bacbceea926e554fe38dc6e67039b1eb0a11c257f31e66840104028aa",
 		"src/mods/abhide.js": "3e33b4080d1b68e30cd0a5b85256851b1419c4f31514b8d68599b4ee5b0b41ff",
 		"src/mods/afk.js": "16aea7879f34945e0fe444b469eed566888c7de48f7b32a3e089fee37ad09299",
 		"src/mods/autoNegotiate.js": "7e04e2b9028b63940515ca124d3a65f3864377e9ac0076d84d3f06750b21594f",
@@ -73,7 +73,7 @@
 		"src/mods/style.js": "c712dc69e4be8af06227ab034c50a1d8f71f7357bfe3c63e8825f9f095f82cd1",
 		"src/mods/swearw.js": "8b55473c6039e5791ee86c4b92d69d0ee388006ba34bcb5a9c7c8a35e4edcc0d",
 		"src/mods/tl.js": "6d4e3899b20537c5fbd6ccd712eb1bb9747f6e70dac859cd917c18841a4dcab2",
-		"src/utils.js": "dcfd2797600e1fbbfa4eb7b0355a155a6d04d7320c68311e85e2fcdf56ce1be4",
+		"src/utils.js": "7e418237f324d7e6b8c594aac484c727ad9c742d586fb065ea56c00cc5f8f3bd",
 		"config/migrations.json": "753af7c37864132a984213a1a184ce36c3fc7dc8701884616a754bc9725474b1"
 	}
 }
