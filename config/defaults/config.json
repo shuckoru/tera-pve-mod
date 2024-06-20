@@ -2,6 +2,30 @@
   "version": 1,
   "generalSettings": {},
   "mods": {
+    "pet": {
+      "enabled": true,
+      "settings": {
+        "petFood": [
+          {
+            "id": 206049,
+            "name": "Puppy Figurine",
+            "cd": 2
+          },
+          {
+            "id": 206050,
+            "name": "Piglet Figurine",
+            "cd": 2
+          },
+          {
+            "id": 206051,
+            "name": "Popori Figurine",
+            "cd": 2
+          }
+        ],
+        "feedWhenBelow": 90,
+        "pets": {}
+      }
+    },
     "abhide": {
       "enabled": true,
       "settings": {
