@@ -137,9 +137,11 @@ class DebuggerMod extends BaseMod {
       else logFileName += "-";
       logFileName += Date.now() + ".log";
 
-      await mkdir(path.join(__dirname, "..", "/logs"), { recursive: true });
+      await mkdir(path.join(__dirname, "..", "..", "/logs"), {
+        recursive: true,
+      });
 
-      this.filePath = path.join(__dirname, "..", "/logs/" + logFileName);
+      this.filePath = path.join(__dirname, "..", "..", "/logs/" + logFileName);
       this.file = fs.createWriteStream(this.filePath, {
         highWaterMark: 1024 * 1024,
       });

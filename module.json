@@ -29,7 +29,8 @@
     "AFKer",
     "yet-another-relog-mod",
     "Auto-Accept-Negotiations",
-    "Auto-Guildquest"
+    "Auto-Guildquest",
+    "auto-pet"
   ],
   "servers": ["https://raw.githubusercontent.com/shuckoru/tera-pve-mod/beta/"],
   "supportUrl": "https://github.com/shuckoru/tera-pve-mod/issues"

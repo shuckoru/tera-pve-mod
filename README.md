@@ -73,5 +73,6 @@ Some of the mods I've taken as inspiration. Here are the credits to the original
 - yet-another-relog-mod: https://github.com/owohail/yet-another-relog-mod
 - Auto-Accept-Negotiations: https://github.com/kernel-dc/Auto-Accept-Negotiations
 - Auto-Guildquest: https://github.com/PsykoDev/Auto-Guildquest
+- Auto Pet: https://github.com/tera-private-mods/auto-pet
 
 If you feel like this mod has been helpful to you feel free to buy me a coffe: https://ko-fi.com/shuckol

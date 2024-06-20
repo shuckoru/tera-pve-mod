@@ -64,7 +64,7 @@
 		"src/mods/bb.js": "6c61a52babe9d8549ae2a4f2209a4b0138259e4535949e79ae568f7299a119ee",
 		"src/mods/bnotify.js": "4b30f7ebe080a236bfd4f54c3a3c5235a097e19b0f0e0871eedf2e2d4afc0f9c",
 		"src/mods/csskip.js": "aed1d78add95230d4772ef7cf993e63f17fac2023922dbd61f0e1a043897f744",
-		"src/mods/debug.js": "2937e6e46c520d694c1a87fd80bc6b57ca3112dceb147036af54e3478a8f8cc0",
+		"src/mods/debug.js": "75e3cccddab23a99e8171d9e2be34ba7e0248dab576ca1686a892bb12e49efd6",
 		"src/mods/fastexit.js": "09ab84e2f12871f196d5ebf55da0f42ca690d6bd74751946ee51a5ad38dd1256",
 		"src/mods/fstats.js": "06fc77257c7ecba77915fd85e867449730195f3af7d788383b6f9707a32c2f33",
 		"src/mods/lockonyou.js": "d7c064dbf186a5f9b40c1ac48388f70a8d34ab7df9b20e1cb64db70faf9f810c",
@@ -74,6 +74,15 @@
 		"src/mods/swearw.js": "8b55473c6039e5791ee86c4b92d69d0ee388006ba34bcb5a9c7c8a35e4edcc0d",
 		"src/mods/tl.js": "6d4e3899b20537c5fbd6ccd712eb1bb9747f6e70dac859cd917c18841a4dcab2",
 		"src/utils.js": "7e418237f324d7e6b8c594aac484c727ad9c742d586fb065ea56c00cc5f8f3bd",
-		"config/migrations.json": "753af7c37864132a984213a1a184ce36c3fc7dc8701884616a754bc9725474b1"
+		"config/migrations.json": "753af7c37864132a984213a1a184ce36c3fc7dc8701884616a754bc9725474b1",
+		"src/defs/C_REQUEST_SPAWN_SERVANT.1.def": "bf34f8f2287f84ad6f67245f31da6934397d81f03db9c8878e4d3ead89a6c83e",
+		"src/defs/C_REQUEST_SPAWN_SERVANT.2.def": "c1c88815d0c97233193ba0d03f11b64bc43aff04cf940931c90e538b1a46b5f5",
+		"src/defs/C_START_SERVANT_ACTIVE_SKILL.1.def": "4fb53e84df698b8a68e2160eaf818284296409232124b4e518936e1a325b3f5a",
+		"src/defs/C_START_SERVANT_ACTIVE_SKILL.2.def": "6df4a7012bdf207fab09d61cb5e5e1e9a304679a8cdd79365bcfe79a72581e93",
+		"src/defs/S_START_COOLTIME_SERVANT_SKILL.1.def": "9531917dceb13a00862d2b07e6ff03865b8ba8888cecbdc7c8a5a7707da931ed",
+		"src/defs/S_UPDATE_SERVANT_INFO.1.def": "355dac2b462cde6b2c00e6712ffdef4807013605d7b4e3d6b33fd12652f7ccd2",
+		"src/logs/pet-1718904406786.log": "789146c696df3ea56ae5465482a504f0f06691d55b0f9640c8d87941237f17e3",
+		"src/logs/pet-1718904475471.log": "c53a085339a69e987b41a79b6b747f631e6197a3d31b9750111329f38c509bb0",
+		"src/mods/pet.js": "a6e99a033cf7ce1dcf85376a75376b9e7e86e00eef1f5b2b720c85224b051270"
 	}
 }
