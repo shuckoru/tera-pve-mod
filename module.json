@@ -30,7 +30,8 @@
     "yet-another-relog-mod",
     "Auto-Accept-Negotiations",
     "Auto-Guildquest",
-    "auto-pet"
+    "auto-pet",
+    "translate"
   ],
   "servers": ["https://raw.githubusercontent.com/shuckoru/tera-pve-mod/beta/"],
   "supportUrl": "https://github.com/shuckoru/tera-pve-mod/issues"

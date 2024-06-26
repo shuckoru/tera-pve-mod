@@ -1,6 +1,10 @@
 const path = require("path");
 const fs = require("fs");
 
+const dismissedMods = {
+  swearw: [1],
+};
+
 const getHookOptions = (position) => ({
   order: position,
   filter: { fake: null, silenced: false, modified: null },
@@ -82,7 +86,18 @@ const extractMods = (dispatch, config) => {
     try {
       const Mod = require(filePath);
       const modInstance = new Mod(dispatch, config);
-      if (!modsToNotInstall.includes(Mod.Name)) mods[Mod.Name] = modInstance;
+      if (modsToNotInstall.includes(Mod.Name)) return;
+
+      if (
+        Mod.Name in dismissedMods &&
+        dismissedMods[Mod.Name].includes(Mod.Version)
+      ) {
+        if (debug)
+          console.log(`Detected old mod in ${filePath}. Skipping loading.`);
+        return;
+      }
+
+      mods[Mod.Name] = modInstance;
     } catch (error) {
       if (debug) console.log(`Error importing: ${filePath}`);
       console.error(error);
@@ -115,4 +130,4 @@ const exportHookUsage = (mods) => {
   console.log(`Hook usage data exported to ${filePath}`);
 };
 
-module.exports = { getHookOptions, extractMods, exportHookUsage };
+module.exports = { getHookOptions, extractMods, getSafeMods, exportHookUsage };

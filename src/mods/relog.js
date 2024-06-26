@@ -92,7 +92,7 @@ class YARMMod extends BaseMod {
       },
       C_SELECT_USER: {
         version: "*",
-        order: 100,
+        position: 100,
         filter: { fake: null },
         handler: this.handleSelectUser.bind(this),
       },

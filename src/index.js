@@ -20,14 +20,18 @@ class PVEMod {
     this.mods = extractMods(this.dispatch, this.Config);
 
     Object.keys(this.mods).forEach((modName) => {
-      const mod = this.mods[modName];
+      try {
+        const mod = this.mods[modName];
 
-      this.initializeHooks(mod);
-      this.initializeCommands(mod);
-      this.initializeEventListeners(mod);
+        this.initializeEventListeners(mod);
+        this.initializeCommands(mod);
+        this.initializeHooks(mod);
 
-      if (this.Config.generalSettings?.debug)
-        console.log(`Installed mod ${modName}`);
+        if (this.Config.generalSettings?.debug)
+          console.log(`Installed mod ${modName}`);
+      } catch (error) {
+        console.error(`Error initializing mod: ${modName}`, error);
+      }
     });
   }
 

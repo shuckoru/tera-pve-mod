@@ -74,7 +74,6 @@ class AutoPetMod extends BaseMod {
       },
       S_REQUEST_SPAWN_SERVANT: {
         handler: (event) => {
-          console.log(event);
           if (mod.game.me.is(event.ownerId)) {
             this.newServant = new Servant(event);
             this.petSummoned = true;
@@ -114,23 +113,6 @@ class AutoPetMod extends BaseMod {
           }
           if (this.mainServant && !this.petSummoned && this.Config.enabled) {
             this.summonPet();
-          }
-        },
-      },
-      S_REQUEST_SPAWN_SERVANT: {
-        handler: (event) => {
-          if (mod.game.me.is(event.ownerId)) {
-            this.newServant = new Servant(event);
-            this.petSummoned = true;
-            this.petGameId = event.gameId;
-            if (
-              this.mainServant == null ||
-              this.newServant.ID != this.mainServant.ID
-            ) {
-              mod.command.message(
-                `Use 'pet save' to save <font color="#30e785">"${event.name}"</font> as your default pet`
-              );
-            }
           }
         },
       },

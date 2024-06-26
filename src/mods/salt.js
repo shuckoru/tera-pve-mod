@@ -43,17 +43,17 @@ class SaltRemoverMod extends BaseMod {
 
     this.Hooks = {
       S_SYSTEM_MESSAGE: {
-        order: Infinity,
+        position: Infinity,
         filter: { fake: null },
         handler: (event) => this.handleSystemMessage(event),
       },
       S_ABNORMALITY_FAIL: {
-        order: Infinity,
+        position: Infinity,
         filter: { fake: null },
         handler: () => this.handleAbnormalityFail(),
       },
       S_CREST_MESSAGE: {
-        order: Infinity,
+        position: Infinity,
         filter: { fake: null },
         handler: (event) => this.handleCrestMessage(event),
       },
