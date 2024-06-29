@@ -19,10 +19,31 @@ function applyMigrationMapping(oldConfig, mapping) {
     current[keys[keys.length - 1]] = value;
   }
 
+  function getValue(obj, path) {
+    const keys = path.split(".");
+    let current = obj;
+    for (const key of keys) {
+      if (current[key] === undefined) {
+        return undefined;
+      }
+      current = current[key];
+    }
+    return current;
+  }
+
   for (const [oldKey, newPath] of Object.entries(mapping)) {
-    if (oldConfig.hasOwnProperty(oldKey)) {
-      setValue(newConfig, newPath, oldConfig[oldKey]);
-      delete newConfig[oldKey];
+    const value = getValue(oldConfig, oldKey);
+    if (value !== undefined) {
+      setValue(newConfig, newPath, value);
+      const keys = oldKey.split(".");
+      let current = newConfig;
+      for (let i = 0; i < keys.length - 1; i++) {
+        if (!current[keys[i]]) {
+          break;
+        }
+        current = current[keys[i]];
+      }
+      delete current[keys[keys.length - 1]];
     }
   }
 
