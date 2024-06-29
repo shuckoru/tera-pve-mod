@@ -50,7 +50,7 @@ class AbnormsHideMod extends BaseMod {
   }
 
   async handleCommand(key, value) {
-    if (JSON.stringify(this.abnormalitiesNames) !== "{}")
+    if (JSON.stringify(this.abnormalitiesNames) == "{}")
       await this.extractAbnormNames();
 
     const abnormId = value || null;
