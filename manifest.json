@@ -29,7 +29,7 @@
 		"package-lock.json": "dec40ab6405aeb0f5ada266ca6f8906ed5348e502208b42493633fa7cba8198b",
 		"src/config.js": "7ba024bfd47876dd3194b4592c454e6bc3e57d5c03d1eabde53151fd5de4d7c5",
 		"src/index.js": "cc8cd09fa2d8aac1c919b3458d19365dffe97c946c1070daf27cf58870bcf157",
-		"src/mods/abhide.js": "6dbe04158d21a328cd6d057cbd8689ea0d9b6131cca461e80e5aa3bb75959900",
+		"src/mods/abhide.js": "bb7c979fb19f87069e5ff2fa5ab0f7fbb1789132cd06d45578ff5eaf3d8e4b84",
 		"src/mods/afk.js": "16aea7879f34945e0fe444b469eed566888c7de48f7b32a3e089fee37ad09299",
 		"src/mods/autoNegotiate.js": "7e04e2b9028b63940515ca124d3a65f3864377e9ac0076d84d3f06750b21594f",
 		"src/mods/camera.js": "3a31a0fa56d23966ea1c0882704c48cb2410923d63b45245e0e48cf45b0805cf",
