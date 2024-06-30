@@ -125,29 +125,6 @@ class AutoPetMod extends BaseMod {
     });
   }
 
-  addDefinitions() {
-    const defsToAdd = [
-      ["C_REQUEST_SPAWN_SERVANT", 1, "C_REQUEST_SPAWN_SERVANT.1.def"],
-      ["C_REQUEST_SPAWN_SERVANT", 2, "C_REQUEST_SPAWN_SERVANT.2.def"],
-      ["C_START_SERVANT_ACTIVE_SKILL", 1, "C_START_SERVANT_ACTIVE_SKILL.1.def"],
-      ["C_START_SERVANT_ACTIVE_SKILL", 2, "C_START_SERVANT_ACTIVE_SKILL.2.def"],
-      [
-        "S_START_COOLTIME_SERVANT_SKILL",
-        1,
-        "S_START_COOLTIME_SERVANT_SKILL.1.def",
-      ],
-      ["S_UPDATE_SERVANT_INFO", 1, "S_UPDATE_SERVANT_INFO.1.def"],
-    ];
-
-    defsToAdd.forEach(([hName, version, fileName]) => {
-      this.mod.dispatch.addDefinition(
-        hName,
-        version,
-        path.join(__dirname, "..", "defs", fileName)
-      );
-    });
-  }
-
   summonPet() {
     this.mod.send("C_REQUEST_SPAWN_SERVANT", "*", {
       servantId: this.mainServant.ID,

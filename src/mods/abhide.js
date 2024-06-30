@@ -7,7 +7,7 @@ class AbnormsHideMod extends BaseMod {
   Description = "Hide certain abnormalities based on configuration";
 
   DebugMode = false;
-  HealerClasses = new Set(["priest", "mystic"]);
+  HealerClasses = new Set(["priest", "elementalist"]);
   abnormalitiesNames = {};
 
   constructor(mod, config) {
@@ -32,6 +32,7 @@ class AbnormsHideMod extends BaseMod {
 
     const { excludeHealers, excludedClasses } =
       this.Config.settings.blacklisted[event.id] || {};
+
     const IAmHealer = this.HealerClasses.has(this.mod.game.me.class);
     const shouldSkipCozHealer = excludeHealers && IAmHealer;
     const myClassIsExcluded = excludedClasses
@@ -74,6 +75,12 @@ class AbnormsHideMod extends BaseMod {
         this.DebugMode = !this.DebugMode;
         this.cmdMsg(`abhide debug: ${this.DebugMode ? "ena" : "disa"}bled`);
         break;
+      case "reset":
+        this.Config.settings.blacklisted = {};
+        this.cmdMsg(
+          "Blacklisted abnormalities reset to default. Restart the game to see effects."
+        );
+        break;
       default:
         this.toggleEnableMod();
         break;
@@ -100,18 +107,17 @@ class AbnormsHideMod extends BaseMod {
       return;
     }
 
-    this.Config.settings.blacklisted[id] =
-      this.Config.settings.blacklisted[id] ||
-      this.getNewBlacklistedAbnormality(id);
+    if (typeof this.Config.settings.blacklisted[id] === "string")
+      this.Config.settings.blacklisted[id] =
+        this.getNewBlacklistedAbnormality(id);
 
-    this.Config.settings.blacklisted[id].excludeHealers =
-      !this.Config.settings.blacklisted[id].excludeHealers;
+    const blacklistedAbnorm = this.Config.settings.blacklisted[id];
+
+    blacklistedAbnorm.excludeHealers = !blacklistedAbnorm.excludeHealers;
 
     this.cmdMsg(
       `<font color="#00FF00">Success:</font> Abnormality ID ${id} is now ${
-        this.Config.settings.blacklisted[id].excludeHealers
-          ? "whitelisted"
-          : "blacklisted"
+        blacklistedAbnorm.excludeHealers ? "whitelisted" : "blacklisted"
       } for healers.`
     );
   }
@@ -124,9 +130,10 @@ class AbnormsHideMod extends BaseMod {
       return;
     }
 
-    this.Config.settings.blacklisted[id] =
-      this.Config.settings.blacklisted[id] ||
-      this.getNewBlacklistedAbnormality(id);
+    if (typeof this.Config.settings.blacklisted[id] === "string")
+      this.Config.settings.blacklisted[id] =
+        this.getNewBlacklistedAbnormality(id);
+
     const blacklistedAbnorm = this.Config.settings.blacklisted[id];
 
     if (this.mod.game.me.class in blacklistedAbnorm.excludedClasses) {
@@ -145,7 +152,7 @@ class AbnormsHideMod extends BaseMod {
   getNewBlacklistedAbnormality(id) {
     return {
       name: this.abnormalitiesNames[id],
-      excludeHealers: true,
+      excludeHealers: false,
       excludedClasses: {},
     };
   }
