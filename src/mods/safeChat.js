@@ -3,6 +3,7 @@ const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 const { updateModConfig } = require("../config");
+const fetch = require("node-fetch");
 
 const Messages = {
   EncryptionEnabled: (enabled) =>
@@ -36,6 +37,8 @@ class SafeChatMod extends BaseMod {
   EncryptedMessageIdentifier = "EMsg: ";
   PublicKeyRequestIdentifier = "KeyReq: ";
   PublicKeyResponseIdentifier = "KeyRes: ";
+  TranslatedMSGIdentifier = "(Translated) : ";
+  SafeMSGIdentifier = "(Safe)";
 
   constructor(mod, config) {
     super(mod, config);
@@ -66,14 +69,16 @@ class SafeChatMod extends BaseMod {
     const msg = event.message;
 
     if (
-      !this.Config.enabled ||
       msg.startsWith(this.PublicKeyResponseIdentifier) ||
       msg.startsWith(this.PublicKeyRequestIdentifier) ||
       msg.startsWith(this.EncryptedMessageIdentifier)
     )
       return;
 
-    if (event.target.toLowerCase() in this.Config.settings.playersPublicKeys) {
+    if (
+      this.Config.enabled &&
+      event.target.toLowerCase() in this.Config.settings.playersPublicKeys
+    ) {
       const encryptedMessage = this.encryptMessage(
         msg,
         event.target.toLowerCase()
@@ -89,7 +94,7 @@ class SafeChatMod extends BaseMod {
           gm: false,
           founder: false,
           name: this.mod.game.me.name,
-          recipient: `(Safe)${event.target}`,
+          recipient: `${this.SafeMSGIdentifier}${event.target}`,
           message: msg,
         };
 
@@ -98,27 +103,22 @@ class SafeChatMod extends BaseMod {
         return false;
       }
     }
-  }
-
-  swearWordsFix(message) {
-    return message.replace(/<FONT>(.*?)<\/FONT>/g, "<FONT></FONT>$1");
+    return true;
   }
 
   handleIncomingWhisper(event) {
     const sender = event.name.toLowerCase();
     const receiver = event.recipient.toLowerCase();
 
-    const msg = event.message;
-
-    if (msg.startsWith(this.PublicKeyResponseIdentifier)) {
+    if (event.message.startsWith(this.PublicKeyResponseIdentifier)) {
       if (!this.isMe(sender)) {
-        const [_, senderPublicKey] = msg.split(" ");
+        const [_, senderPublicKey] = event.message.split(" ");
         this.addPublicKey(sender, senderPublicKey);
       }
       return false;
     }
 
-    if (msg.startsWith(this.PublicKeyRequestIdentifier)) {
+    if (event.message.startsWith(this.PublicKeyRequestIdentifier)) {
       if (!this.isMe(sender)) {
         this.sendPublicKey(sender);
         if (!(sender in this.Config.settings.playersPublicKeys))
@@ -127,21 +127,39 @@ class SafeChatMod extends BaseMod {
       return false;
     }
 
-    if (this.Config.enabled && this.isMessageEncrypted(event.message)) {
+    if (this.isMessageEncrypted(event.message)) {
       if (this.isMe(sender)) return false;
 
       event.message = this.decryptMessage(event.message);
 
       if (this.isMessageEncrypted(event.message)) {
+        // TODO: handle this better by sending them key directly and also requesting new one
         event.message =
           "Sender tried to send an encrypted message but decryption failed. Make sure they have your updated keys.";
-        this.mod.send("S_WHISPER", "*", event);
       } else {
-        event.name = "(Safe)" + event.name;
-        this.mod.send("S_WHISPER", "*", event);
+        event.name = this.SafeMSGIdentifier + event.name;
       }
-      return false;
+      return true;
     }
+
+    if (
+      this.Config.settings.translateMessages &&
+      !event.message.startsWith(this.TranslatedMSGIdentifier)
+    ) {
+      const eventCopy = { ...event };
+      this.translate(
+        eventCopy.message,
+        this.Config.settings.translateTo || "en"
+      ).then((translatedMsg) => {
+        if (translatedMsg.startsWith(this.TranslatedMSGIdentifier)) {
+          eventCopy.message = translatedMsg;
+          this.mod.send("S_WHISPER", "*", eventCopy);
+        }
+      });
+      return;
+    }
+    event.message = this.swearWordsFix(event.message);
+    return true;
   }
 
   addPublicKey(name, key) {
@@ -275,23 +293,50 @@ class SafeChatMod extends BaseMod {
     this.privateKey = fs.readFileSync(privateKeyPath, "utf8");
   }
 
-  handleCommand(key, value, args) {
-    switch (key) {
-      case "help":
-        this.cmdMsg(Messages.EncryptionHelp);
-        break;
-      case "add":
-        if (!value) {
-          this.cmdMsg("Usage: add [player]");
-        } else {
-          const player = value.toLowerCase();
-          this.requestPublicKey(player);
-        }
-        break;
-      default:
-        this.toggleEnableMod();
-        break;
+  async translate(text, targetLang) {
+    let sourceLang = "auto";
+
+    text = this.swearWordsFix(text);
+
+    const url =
+      "https://translate.google.com/translate_a/single" +
+      "?client=at&dt=t&dt=ld&dt=qca&dt=rm&dt=bd&dj=1&hl=" +
+      targetLang +
+      "&ie=UTF-8" +
+      "&oe=UTF-8&inputm=2&otf=2&iid=1dd3b944-fa62-4b55-b330-74909a99969e";
+
+    const data = new URLSearchParams({
+      sl: sourceLang,
+      tl: targetLang,
+      q: text,
+    });
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+        "User-Agent":
+          "AndroidTranslate/5.3.0.RC02.130475354-53000263 5.1 phone TRANSLATE_OPM5_TEST_1",
+      },
+      body: data.toString(),
+    });
+
+    if (response.status != 200) {
+      console.error(response);
+      return text;
     }
+
+    const json = await response.json();
+
+    const translatedMsg = json.sentences.map((e) => e.trans).join("");
+
+    if (json.confidence < 0.2 || text == translatedMsg) return text;
+
+    return this.TranslatedMSGIdentifier + translatedMsg;
+  }
+
+  swearWordsFix(message) {
+    return message.replace(/<FONT>(.*?)<\/FONT>/g, "<FONT></FONT>$1");
   }
 
   requestPublicKey(player) {
@@ -310,6 +355,35 @@ class SafeChatMod extends BaseMod {
       target: requester.toLowerCase(),
     });
     this.cmdMsg(Messages.PublicKeySent(requester));
+  }
+
+  handleCommand(key, value, args) {
+    switch (key) {
+      case "help":
+        this.cmdMsg(Messages.EncryptionHelp);
+        break;
+      case "add":
+        if (!value) {
+          this.cmdMsg("Usage: add [player]");
+        } else {
+          const player = value.toLowerCase();
+          this.requestPublicKey(player);
+        }
+        break;
+      case "translate":
+        this.toggleEnabledSettings("translateMessages");
+        break;
+      case "translateto":
+        if (!value) {
+          this.cmdMsg("Usage: translateto [language]");
+        } else {
+          this.updateSettingsValue("translateTo", value);
+        }
+        break;
+      default:
+        this.toggleEnableMod();
+        break;
+    }
   }
 }
 

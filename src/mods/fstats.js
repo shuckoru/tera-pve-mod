@@ -313,7 +313,7 @@ class FightStatsMod extends BaseMod {
       case "startondmg":
         this.toggleEnabledSettings("startFightOnFirstDmgHit");
         break;
-      case "partydps":
+      case "live":
         this.toggleEnabledSettings("liveDpsMeterEnabled");
         break;
       case "personaldps":
@@ -344,7 +344,7 @@ class FightStatsMod extends BaseMod {
   showHelp() {
     const helpMessage = `<font color="#56B4E9">FightStats Commands:</font>
 <font color="#56B4E9">startondmg</font>: Toggle start fight on first damage hit.
-<font color="#56B4E9">partydps</font>: Toggle live party DPS meter.
+<font color="#56B4E9">live</font>: Toggle live party DPS meter.
 <font color="#56B4E9">personaldps</font>: Toggle personal DPS meter.
 <font color="#56B4E9">timer</font>: Toggle fight timer.
 <font color="#56B4E9">autopaste</font>: Toggle auto paste DPS in party chat.

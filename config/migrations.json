@@ -42,5 +42,8 @@
     "skillsResetPlaySound": "mods.sresets.settings.skillsResetPlaySound",
     "skillsResetSoundId": "mods.sresets.settings.skillsResetSoundId",
     "afkTrue": "mods.afk.enabled"
+  },
+  "2": {
+    "mods.abhide.settings.blacklistedAbnormalities": "mods.abhide.settings.blacklisted"
   }
 }

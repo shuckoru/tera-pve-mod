@@ -32,7 +32,7 @@ class TeralogsMod extends BaseMod {
   static Version = 1;
 
   static Name = "tl";
-  Description = "Provides dungeon lookup capabilities for teralogs.com.";
+  Description = "Provides dungeon lookup capabilities for teralogs.com";
 
   constructor(mod, config) {
     super(mod, config);

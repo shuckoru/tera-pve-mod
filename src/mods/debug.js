@@ -14,7 +14,6 @@ class DebuggerMod extends BaseMod {
   Commands = null;
   abnormalitiesWithNames = {};
   abDebugEnabled = false;
-  abDebugAllEnabled = false;
   actionDebugEnabled = false;
   packetsLoggerEnabled = false;
   loggerHook = null;
@@ -93,10 +92,7 @@ class DebuggerMod extends BaseMod {
   handleAbnormality(event) {
     if (!this.abDebugEnabled) return;
     const name = this.abnormalitiesWithNames[event.id];
-    const isBlacklisted = event.id in this.Config.blacklistedAbnormalities;
-    if (this.abDebugAllEnabled) {
-      this.cmdMsg(`name: ${name} id: ${event.id}`);
-    } else if (name && !isBlacklisted) {
+    if (name) {
       this.cmdMsg(`name: ${name} id: ${event.id}`);
     }
   }
@@ -137,9 +133,11 @@ class DebuggerMod extends BaseMod {
       else logFileName += "-";
       logFileName += Date.now() + ".log";
 
-      await mkdir(path.join(__dirname, "..", "/logs"), { recursive: true });
+      await mkdir(path.join(__dirname, "..", "..", "/logs"), {
+        recursive: true,
+      });
 
-      this.filePath = path.join(__dirname, "..", "/logs/" + logFileName);
+      this.filePath = path.join(__dirname, "..", "..", "/logs/" + logFileName);
       this.file = fs.createWriteStream(this.filePath, {
         highWaterMark: 1024 * 1024,
       });
@@ -183,15 +181,8 @@ class DebuggerMod extends BaseMod {
   }
 
   toggleAbDebug(all) {
-    if (all) {
-      this.abDebugAllEnabled = !this.abDebugAllEnabled;
-      this.cmdMsg(
-        this.Messages.AbnormalitiesDebugAllMode(this.abDebugAllEnabled)
-      );
-    } else {
-      this.abDebugEnabled = !this.abDebugEnabled;
-      this.cmdMsg(this.Messages.AbnormalitiesDebugMode(this.abDebugEnabled));
-    }
+    this.abDebugEnabled = !this.abDebugEnabled;
+    this.cmdMsg(this.Messages.AbnormalitiesDebugMode(this.abDebugEnabled));
 
     if (
       this.abDebugEnabled &&
