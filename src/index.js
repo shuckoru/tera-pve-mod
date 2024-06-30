@@ -180,11 +180,8 @@ class PVEMod {
   loadDefinitions() {
     const defsDir = path.join(__dirname, ".", "defs");
 
-    fs.readdir(defsDir, (err, files) => {
-      if (err) {
-        console.error("Error reading definitions directory", err);
-        return;
-      }
+    try {
+      const files = fs.readdirSync(defsDir);
 
       files.forEach((fileName) => {
         if (fileName.endsWith(".def")) {
@@ -196,7 +193,9 @@ class PVEMod {
           );
         }
       });
-    });
+    } catch (err) {
+      console.error("Error reading definitions directory", err);
+    }
 
     // Helper function to parse the file name
     function parseFileName(fileName) {
