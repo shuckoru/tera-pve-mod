@@ -96,6 +96,7 @@ class AbnormsHideMod extends BaseMod {
 <font color="#56B4E9">excludehealers [abnormalityId]</font>: Toggle healer exclusion for the specified abnormality.
 <font color="#56B4E9">excludeclass [abnormalityId]</font>: Exclude your class from the specified abnormality.
 <font color="#56B4E9">debug</font>: Toggle abnormalities debug mode.
+<font color="#56B4E9">reset</font>: Reset blacklisted abornmalities to default.
 <font color="#56B4E9">[any other key]</font>: Toggle Abnormalities Hide Mod.`);
   }
 
