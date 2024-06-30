@@ -54,8 +54,6 @@ class AutoPetMod extends BaseMod {
       },
     });
 
-    this.addDefinitions();
-
     this.Hooks = {
       C_PLAYER_LOCATION: {
         handler: (event) => {
