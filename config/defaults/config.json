@@ -54,6 +54,16 @@
             "excludeHealers": false,
             "excludedClasses": {}
           },
+          "4031": {
+            "name": "Everful Nostrum",
+            "excludeHealers": false,
+            "excludedClasses": {}
+          },
+          "4033": {
+            "name": "Everful Nostrum (BTS if shown)",
+            "excludeHealers": false,
+            "excludedClasses": {}
+          },
           "4401": {
             "name": "Pep in your Step",
             "excludeHealers": false,
@@ -114,6 +124,11 @@
             "excludeHealers": false,
             "excludedClasses": {}
           },
+          "27080": {
+            "name": "Glyph of Blaze",
+            "excludeHealers": false,
+            "excludedClasses": {}
+          },
           "27120": {
             "name": "Glyph of Grounding",
             "excludeHealers": false,
@@ -126,6 +141,11 @@
           },
           "27161": {
             "name": "Glyph of Major Restoration",
+            "excludeHealers": false,
+            "excludedClasses": {}
+          },
+          "28050": {
+            "name": "Glyph of Fleetfoot",
             "excludeHealers": false,
             "excludedClasses": {}
           },
@@ -145,6 +165,11 @@
           },
           "60032": {
             "name": "Concentration IV",
+            "excludeHealers": false,
+            "excludedClasses": {}
+          },
+          "70243": {
+            "name": "Spicy Fish Buffet",
             "excludeHealers": false,
             "excludedClasses": {}
           },
@@ -268,6 +293,11 @@
             "excludeHealers": false,
             "excludedClasses": {}
           },
+          "690100": {
+            "name": "Remanant Evade",
+            "excludeHealers": false,
+            "excludedClasses": {}
+          },
           "690131": {
             "name": "Haymaker: Resonance",
             "excludeHealers": false,
@@ -297,12 +327,12 @@
           },
           "700300": {
             "name": "Aura of the Tenacious",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "700330": {
             "name": "Aura of the Tenacious",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "700409": {
@@ -327,22 +357,27 @@
           },
           "701606": {
             "name": "Warding Totem II",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "702000": {
             "name": "Elementalize",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "702002": {
             "name": "Elemental: Thrall of Life",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "702003": {
             "name": "Elemental: Thrall of Vengeance",
-            "excludeHealers": false,
+            "excludeHealers": true,
+            "excludedClasses": {}
+          },
+          "702005": {
+            "name": "Elementalize",
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "702012": {
@@ -352,17 +387,17 @@
           },
           "702121": {
             "name": "Elemental: Thrall of Life",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "702122": {
             "name": "Elemental: Thrall of Vengeance",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "702123": {
             "name": "Elemental: Thrall of Wrath",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "702200": {
@@ -387,7 +422,7 @@
           },
           "801503": {
             "name": "Energy Stars IV",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "801510": {
@@ -402,7 +437,7 @@
           },
           "805102": {
             "name": "Blessing of Shakan III",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "805700": {
@@ -412,32 +447,32 @@
           },
           "805713": {
             "name": "Divine Charge IV",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "806020": {
             "name": "Devoted Favor",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "806021": {
             "name": "Enhanced Devoted Favor",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "806022": {
             "name": "Enhanced Devoted Favor",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "806023": {
             "name": "Devoted Favor",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "806103": {
             "name": "Enhanced Devoted Favor",
-            "excludeHealers": false,
+            "excludeHealers": true,
             "excludedClasses": {}
           },
           "806104": {
@@ -627,6 +662,11 @@
             "excludeHealers": false,
             "excludedClasses": {}
           },
+          "81120101": {
+            "name": "Lethal Lesson",
+            "excludeHealers": false,
+            "excludedClasses": {}
+          },
           "81120320": {
             "name": "Crit Resist Decrease",
             "excludeHealers": false,
@@ -642,6 +682,11 @@
             "excludeHealers": false,
             "excludedClasses": {}
           },
+          "81123015": {
+            "name": "Combat Speed: Stage XV",
+            "excludeHealers": false,
+            "excludedClasses": {}
+          },
           "81123115": {
             "name": "Combat Dash: Stage XV",
             "excludeHealers": false,
@@ -649,6 +694,11 @@
           },
           "88120120": {
             "name": "Desperate Force",
+            "excludeHealers": false,
+            "excludedClasses": {}
+          },
+          "88722160": {
+            "name": "Spirit of Iron",
             "excludeHealers": false,
             "excludedClasses": {}
           },

@@ -1,6 +1,9 @@
 const { loadConfig, updateGeneralSettings } = require("./config");
 const { getHookOptions, extractMods } = require("./utils");
 
+const fs = require("fs");
+const path = require("path");
+
 class PVEMod {
   constructor(dispatch) {
     this.dispatch = dispatch;
@@ -11,6 +14,8 @@ class PVEMod {
     this.dispatch.game.initialize("me");
     this.dispatch.game.initialize("me.abnormalities");
     this.dispatch.game.initialize("party");
+
+    this.loadDefinitions();
 
     this.loadMods();
     this.registerCommands();
@@ -170,6 +175,36 @@ class PVEMod {
     this.dispatch.command.message(
       `Mod ${modName} is going to be installed with next restart.`
     );
+  }
+
+  loadDefinitions() {
+    const defsDir = path.join(__dirname, ".", "defs");
+
+    fs.readdir(defsDir, (err, files) => {
+      if (err) {
+        console.error("Error reading definitions directory", err);
+        return;
+      }
+
+      files.forEach((fileName) => {
+        if (fileName.endsWith(".def")) {
+          const [hName, version] = parseFileName(fileName);
+          this.dispatch.dispatch.addDefinition(
+            hName,
+            version,
+            path.join(defsDir, fileName)
+          );
+        }
+      });
+    });
+
+    // Helper function to parse the file name
+    function parseFileName(fileName) {
+      const parts = fileName.split(".");
+      const hName = parts[0];
+      const version = parseInt(parts[1], 10);
+      return [hName, version];
+    }
   }
 
   reloadMods() {

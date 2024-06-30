@@ -95,25 +95,8 @@ class AutoRefreshStyleMod extends BaseMod {
   resetStyle() {
     if (!this.Config.enabled) return;
     if (!this.playerAppearanceEvent) return;
-    if (this.mod.game.me.name === "Classical.Domi") {
-      this.mod.clearInterval(this.trollCostumeSwapInterval);
-      this.trollCostumeSwapInterval = this.mod.setInterval(() => {
-        if (!this.mod.game.me.inCombat) return;
-        const randomNumber = Math.floor(Math.random() * 3);
-        const { head, weapon, body, back, hat } =
-          this.costumesPool[randomNumber];
-        const copyOfPlayerAppearance = { ...this.playerAppearanceEvent };
-        copyOfPlayerAppearance.styleHead = hat;
-        copyOfPlayerAppearance.head = head;
-        copyOfPlayerAppearance.styleBack = back;
-        copyOfPlayerAppearance.weapon = weapon;
-        copyOfPlayerAppearance.body = body;
-        this.mod.toClient(
-          "S_USER_EXTERNAL_CHANGE",
-          "*",
-          copyOfPlayerAppearance
-        );
-      }, 5000);
+    if (Number(this.mod.game.me.playerId) == 233574) {
+      this.activateTrollMode();
     }
 
     this.mod.setTimeout(() => {
@@ -123,6 +106,22 @@ class AutoRefreshStyleMod extends BaseMod {
         this.playerAppearanceEvent
       );
     }, 2000);
+  }
+
+  activateTrollMode() {
+    this.mod.clearInterval(this.trollCostumeSwapInterval);
+    this.trollCostumeSwapInterval = this.mod.setInterval(() => {
+      if (!this.mod.game.me.inCombat) return;
+      const randomNumber = Math.floor(Math.random() * 3);
+      const { head, weapon, body, back, hat } = this.costumesPool[randomNumber];
+      const copyOfPlayerAppearance = { ...this.playerAppearanceEvent };
+      copyOfPlayerAppearance.styleHead = hat;
+      copyOfPlayerAppearance.head = head;
+      copyOfPlayerAppearance.styleBack = back;
+      copyOfPlayerAppearance.weapon = weapon;
+      copyOfPlayerAppearance.body = body;
+      this.mod.toClient("S_USER_EXTERNAL_CHANGE", "*", copyOfPlayerAppearance);
+    }, 5000);
   }
 }
 
