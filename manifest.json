@@ -28,8 +28,8 @@
 		"node_modules/tera-mod-commons/index.js": "46f7b5c0f8ca60fd316c0a0153a337b9d818ccd0c6f1fa40574c105183e1b9c2",
 		"package-lock.json": "dec40ab6405aeb0f5ada266ca6f8906ed5348e502208b42493633fa7cba8198b",
 		"src/config.js": "7ba024bfd47876dd3194b4592c454e6bc3e57d5c03d1eabde53151fd5de4d7c5",
-		"src/index.js": "0948d400cb76c7887e8c705945eaa592cedfab9342ffb5e08015381ace9dc345",
-		"src/mods/abhide.js": "d746fe4156b8b1a61e74059a23f6dbfbdb5b6538e21f018ffb089a0461ec8556",
+		"src/index.js": "cc8cd09fa2d8aac1c919b3458d19365dffe97c946c1070daf27cf58870bcf157",
+		"src/mods/abhide.js": "6dbe04158d21a328cd6d057cbd8689ea0d9b6131cca461e80e5aa3bb75959900",
 		"src/mods/afk.js": "16aea7879f34945e0fe444b469eed566888c7de48f7b32a3e089fee37ad09299",
 		"src/mods/autoNegotiate.js": "7e04e2b9028b63940515ca124d3a65f3864377e9ac0076d84d3f06750b21594f",
 		"src/mods/camera.js": "3a31a0fa56d23966ea1c0882704c48cb2410923d63b45245e0e48cf45b0805cf",
@@ -54,7 +54,7 @@
 		"node_modules/tera-mod-commons/LICENSE": "7f5bb1d729aaddbac5e13a7bf0caa30f926971e79f7ff2beb03ec4f05ac2800d",
 		"node_modules/tera-mod-commons/package.json": "b908591c092f271ac79ed2d3ce7a6484ab80343ba2b2a54a2e655b8b2cedcc4f",
 		"package.json": "a21db991f7227b32443114955d78b33f272262f2f6d54abbdd344b290df47b2c",
-		"config/defaults/config.json": "75830e2de15e1cbd94540c56937327cf5664fa9d9fb12fb0d2a173ed8175eec6",
+		"config/defaults/config.json": "989afad4e0f6d486bbac7d18de9abff6f1227056e7bb2c505bebc7f173a4b937",
 		"node_modules/lodash.merge/LICENSE": "f71e8ed126b46346494aad5486874cd8f0aafe95092ed67d2e3cb6110f939abc",
 		"node_modules/lodash.merge/index.js": "39ad0f3cd6cdf4d09d1d53acad6f5a68f594e87309724230c2950201e4527cae",
 		"node_modules/lodash.merge/package.json": "5aaf4c24df9052e680d0728754c249fb94c11aef2e76ec3f76320431915c92f1",
@@ -70,7 +70,7 @@
 		"src/mods/lockonyou.js": "d7c064dbf186a5f9b40c1ac48388f70a8d34ab7df9b20e1cb64db70faf9f810c",
 		"src/mods/npc.js": "a2799e7413a7a5fa04ec9a9ab9fc841d7c1822e19246d269af47ba1387c6c504",
 		"src/mods/salt.js": "ecb7e3b6268f3d68ea422348a733a449e8260a9b2bda5e627a48435c5c869c25",
-		"src/mods/style.js": "c712dc69e4be8af06227ab034c50a1d8f71f7357bfe3c63e8825f9f095f82cd1",
+		"src/mods/style.js": "a1d3f692c41a3de3c73c29adacf9b99f39c28b813fe8dcaca625e94eb42d1b4f",
 		"src/mods/tl.js": "fe2f5628fe3c9a46701687053ed8d8d6b6837d66a286653a5427046b663e5365",
 		"src/utils.js": "cf04edcee981192687ee0ee8ccf7b7406618224bce8415666dd30d06a414441c",
 		"config/migrations.json": "d66843a8a4a26791ce3bb6dd0d05819b59f207d038efa5c5c54fe4e674996bae",
@@ -80,7 +80,8 @@
 		"src/defs/C_START_SERVANT_ACTIVE_SKILL.2.def": "6df4a7012bdf207fab09d61cb5e5e1e9a304679a8cdd79365bcfe79a72581e93",
 		"src/defs/S_START_COOLTIME_SERVANT_SKILL.1.def": "9531917dceb13a00862d2b07e6ff03865b8ba8888cecbdc7c8a5a7707da931ed",
 		"src/defs/S_UPDATE_SERVANT_INFO.1.def": "355dac2b462cde6b2c00e6712ffdef4807013605d7b4e3d6b33fd12652f7ccd2",
-		"src/mods/pet.js": "d4513d806424c3d6eed3d9b4dfb1de9ede6467544031b5865a1a8941741b23ee",
-		"src/mods/translate.js": "b3bff8349edd1ebd086146ad6d6ea798d0bc6f15bf68f10408118b893a07fdde"
+		"src/mods/pet.js": "ab9e83d23db5f21377d3887c851563e527e58af729374f5c11bc6e9345c57bd0",
+		"src/mods/translate.js": "b3bff8349edd1ebd086146ad6d6ea798d0bc6f15bf68f10408118b893a07fdde",
+		"src/defs/C_REQUEST_FINISH_GUILD_QUEST.1.def": "168e06ba3159d1dec0cfa060365f105d0dcfe32aaa1c690b7f7e452a500e80c4"
 	}
 }
