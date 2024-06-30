@@ -71,7 +71,6 @@
 		"src/mods/npc.js": "a2799e7413a7a5fa04ec9a9ab9fc841d7c1822e19246d269af47ba1387c6c504",
 		"src/mods/salt.js": "ecb7e3b6268f3d68ea422348a733a449e8260a9b2bda5e627a48435c5c869c25",
 		"src/mods/style.js": "c712dc69e4be8af06227ab034c50a1d8f71f7357bfe3c63e8825f9f095f82cd1",
-		"src/mods/swearw.js": "8b55473c6039e5791ee86c4b92d69d0ee388006ba34bcb5a9c7c8a35e4edcc0d",
 		"src/mods/tl.js": "fe2f5628fe3c9a46701687053ed8d8d6b6837d66a286653a5427046b663e5365",
 		"src/utils.js": "cf04edcee981192687ee0ee8ccf7b7406618224bce8415666dd30d06a414441c",
 		"config/migrations.json": "d66843a8a4a26791ce3bb6dd0d05819b59f207d038efa5c5c54fe4e674996bae",
