@@ -80,7 +80,7 @@
 		"src/defs/C_START_SERVANT_ACTIVE_SKILL.2.def": "6df4a7012bdf207fab09d61cb5e5e1e9a304679a8cdd79365bcfe79a72581e93",
 		"src/defs/S_START_COOLTIME_SERVANT_SKILL.1.def": "9531917dceb13a00862d2b07e6ff03865b8ba8888cecbdc7c8a5a7707da931ed",
 		"src/defs/S_UPDATE_SERVANT_INFO.1.def": "355dac2b462cde6b2c00e6712ffdef4807013605d7b4e3d6b33fd12652f7ccd2",
-		"src/mods/pet.js": "ab9e83d23db5f21377d3887c851563e527e58af729374f5c11bc6e9345c57bd0",
+		"src/mods/pet.js": "c84181fda98ca6ebc34b46b7c1b579be847e264a4dbab5cf9d64bd843fb43998",
 		"src/mods/translate.js": "b3bff8349edd1ebd086146ad6d6ea798d0bc6f15bf68f10408118b893a07fdde",
 		"src/defs/C_REQUEST_FINISH_GUILD_QUEST.1.def": "168e06ba3159d1dec0cfa060365f105d0dcfe32aaa1c690b7f7e452a500e80c4"
 	}
