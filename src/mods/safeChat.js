@@ -16,10 +16,12 @@ const Messages = {
     `Private message sent to ${recipient}: ${message}`,
   PrivateMessageReceived: (sender, message) =>
     `Private message received from ${sender}: ${message}`,
-  EncryptionHelp: `<font color="#56B4E9">Encryption Commands:</font>
+  EncryptionHelp: `<font color="#56B4E9">Safechat Commands:</font>
 <font color="#56B4E9">safechat</font>: Enable/Disable whisper encryption.
 <font color="#56B4E9">add [player]</font>: Exchange public keys with a player.
-<font color="#56B4E9">help</font>: Show this help message.`,
+<font color="#56B4E9">help</font>: Show this help message.
+<font color="#56B4E9">(S)</font>: Messages with this flag will be secure.
+<font color="#56B4E9">(T)</font>: Messages with this flag will be translated ones.`,
 
   PublicKeyRequestSent: (recipient) =>
     `Public key request sent to ${recipient}.`,
@@ -34,11 +36,11 @@ class SafeChatMod extends BaseMod {
   Description = "Send and receive private messages using end-to-end encryption";
   Hooks = {};
   Commands = null;
-  EncryptedMessageIdentifier = "EMsg: ";
-  PublicKeyRequestIdentifier = "KeyReq: ";
-  PublicKeyResponseIdentifier = "KeyRes: ";
-  TranslatedMSGIdentifier = "(Translated) : ";
-  SafeMSGIdentifier = "(Safe)";
+  EncryptedMessageIdentifier = "EMsg";
+  PublicKeyRequestIdentifier = "KeyReq";
+  PublicKeyResponseIdentifier = "KeyRes";
+  TranslatedMSGIdentifier = "(T)";
+  SafeMSGIdentifier = "(S)";
 
   constructor(mod, config) {
     super(mod, config);
@@ -94,8 +96,8 @@ class SafeChatMod extends BaseMod {
           gm: false,
           founder: false,
           name: this.mod.game.me.name,
-          recipient: `${this.SafeMSGIdentifier}${event.target}`,
-          message: msg,
+          recipient: event.target,
+          message: `${this.SafeMSGIdentifier} : ${msg}`,
         };
 
         this.mod.send("S_WHISPER", "*", localWhisperEvent);
@@ -136,8 +138,6 @@ class SafeChatMod extends BaseMod {
         // TODO: handle this better by sending them key directly and also requesting new one
         event.message =
           "Sender tried to send an encrypted message but decryption failed. Make sure they have your updated keys.";
-      } else {
-        event.name = this.SafeMSGIdentifier + event.name;
       }
       return true;
     }
@@ -221,7 +221,7 @@ class SafeChatMod extends BaseMod {
         ""
       );
 
-      return this.EncryptedMessageIdentifier + encryptedDataAlphanumeric;
+      return `${this.EncryptedMessageIdentifier} : ${encryptedDataAlphanumeric}`;
     } catch (error) {
       console.error(error);
       return message;
@@ -265,7 +265,7 @@ class SafeChatMod extends BaseMod {
       let decrypted = decipher.update(encryptedMessage, "base64", "utf8");
       decrypted += decipher.final("utf8");
 
-      return decrypted;
+      return `${this.SafeMSGIdentifier} : ${decrypted}`;
     } catch (error) {
       console.error(error);
       return message;
@@ -332,7 +332,7 @@ class SafeChatMod extends BaseMod {
 
     if (json.confidence < 0.2 || text == translatedMsg) return text;
 
-    return this.TranslatedMSGIdentifier + translatedMsg;
+    return `${this.TranslatedMSGIdentifier}: ${translatedMsg}`;
   }
 
   swearWordsFix(message) {
@@ -340,7 +340,7 @@ class SafeChatMod extends BaseMod {
   }
 
   requestPublicKey(player) {
-    const requestMessage = `${this.PublicKeyRequestIdentifier}${this.mod.game.me.name} is requesting a safe chat connection.`;
+    const requestMessage = `${this.PublicKeyRequestIdentifier} : ${this.mod.game.me.name} is requesting a safe chat connection.`;
     this.mod.send("C_WHISPER", "*", {
       message: requestMessage,
       target: player.toLowerCase(),
@@ -349,7 +349,7 @@ class SafeChatMod extends BaseMod {
   }
 
   sendPublicKey(requester) {
-    const responseMessage = this.PublicKeyResponseIdentifier + this.publicKey;
+    const responseMessage = `${this.PublicKeyResponseIdentifier} : ${this.publicKey}`;
     this.mod.send("C_WHISPER", "*", {
       message: responseMessage,
       target: requester.toLowerCase(),

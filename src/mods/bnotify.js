@@ -258,7 +258,7 @@ class SimpleBattleNotify extends BaseMod {
         this.toggleEnabledSettings("debuffReminderEnabled");
         break;
       default:
-        this.showStatus();
+        this.toggleEnableMod();
         break;
     }
   }
@@ -273,9 +273,10 @@ class SimpleBattleNotify extends BaseMod {
   }
 
   showStatus() {
-    const { burnNotifyEnabled } = this.Config.settings;
+    const { burnNotifyEnabled, debuffReminderEnabled } = this.Config.settings;
 
     this.cmdMsg(Messages.BurnNotifyEnabled(burnNotifyEnabled));
+    this.cmdMsg(Messages.DebuffReminderEnabled(debuffReminderEnabled));
   }
 
   setPlayerRole(playerClass) {
