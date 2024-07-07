@@ -90,7 +90,7 @@ class TranslateMod extends BaseMod {
     "yi",
   ];
 
-  TranslatedMSGIdentifier = "(Translated) :";
+  TranslatedMSGIdentifier = "(T)";
 
   constructor(mod, config) {
     super(mod, config);
@@ -240,7 +240,7 @@ class TranslateMod extends BaseMod {
 
     if (json.confidence < 0.2 || text == translatedMsg) return;
 
-    return `<FONT>${this.TranslatedMSGIdentifier} ${translatedMsg}</FONT>`;
+    return `<FONT>${this.TranslatedMSGIdentifier}: ${translatedMsg}</FONT>`;
   }
 }
 
