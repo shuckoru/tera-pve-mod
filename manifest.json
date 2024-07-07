@@ -39,7 +39,7 @@
 		"src/mods/relog.js": "7bb8dd768beffd8cf98e653f2a06f8264c97841e42e9c8c1022c003c215e4f8a",
 		"src/mods/skillResets.js": "b63fab5adb33de295fa1f2171d01a352ab44bb21189be69a6e9e5b6674d76d86",
 		"src/mods/smoldmg.js": "0da134c6448a9dd9d55c361a47370df91ef84215be1d5cbacf4d797097e7ec0a",
-		"src/mods/safeChat.js": "9ee2be9019583b36eaefa0bac1cb462a401d88bf42b12f46fa0fbfd42cc54340",
+		"src/mods/safeChat.js": "28cf17e88d7116969fa4c526611791c08e9f8e6d1668f0206c24b04cfbd9c34b",
 		"LICENSE": "a81cda37331c1f405ae39183ab5232f6bf7042076f1b877e94550cfe869cb814",
 		"node_modules/clone/LICENSE": "3fb0857ef0133928cf72c88dfc464e931486e88778961eedec25585e2321507f",
 		"node_modules/clone/package.json": "07e9c7efd55a99cbe2909d1fd46b032b67cba6b493d1fbc974fddf4f2adebc83",
@@ -62,7 +62,7 @@
 		"src/mods/autovg.js": "f19925f3b7c447610f1485d641b595d5d178493b676e27f0760fb7544eb23402",
 		"src/mods/base.js": "c323b06171744c6a0301f6f96f33d233ed7ad99d0fe99575ceee3f1f4b7408a5",
 		"src/mods/bb.js": "6c61a52babe9d8549ae2a4f2209a4b0138259e4535949e79ae568f7299a119ee",
-		"src/mods/bnotify.js": "4b30f7ebe080a236bfd4f54c3a3c5235a097e19b0f0e0871eedf2e2d4afc0f9c",
+		"src/mods/bnotify.js": "c0c991ed63908f1280bc7185c43aa52cbb8d2dbdc54f98dec67be78890556b20",
 		"src/mods/csskip.js": "aed1d78add95230d4772ef7cf993e63f17fac2023922dbd61f0e1a043897f744",
 		"src/mods/debug.js": "e12ba4a64934cc0c03bd22828c9f1c2e9bcff59e884aeb88745ecfa67432b96b",
 		"src/mods/fastexit.js": "09ab84e2f12871f196d5ebf55da0f42ca690d6bd74751946ee51a5ad38dd1256",
@@ -81,7 +81,7 @@
 		"src/defs/S_START_COOLTIME_SERVANT_SKILL.1.def": "9531917dceb13a00862d2b07e6ff03865b8ba8888cecbdc7c8a5a7707da931ed",
 		"src/defs/S_UPDATE_SERVANT_INFO.1.def": "355dac2b462cde6b2c00e6712ffdef4807013605d7b4e3d6b33fd12652f7ccd2",
 		"src/mods/pet.js": "c84181fda98ca6ebc34b46b7c1b579be847e264a4dbab5cf9d64bd843fb43998",
-		"src/mods/translate.js": "b3bff8349edd1ebd086146ad6d6ea798d0bc6f15bf68f10408118b893a07fdde",
+		"src/mods/translate.js": "4ac2165f478f3d9cf7216440ac85d21e49559ceec17927f3720de04484e80f58",
 		"src/defs/C_REQUEST_FINISH_GUILD_QUEST.1.def": "168e06ba3159d1dec0cfa060365f105d0dcfe32aaa1c690b7f7e452a500e80c4"
 	}
 }
