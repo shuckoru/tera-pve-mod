@@ -233,11 +233,6 @@
             "excludeHealers": false,
             "excludedClasses": {}
           },
-          "401704": {
-            "name": "Bloodshed",
-            "excludeHealers": false,
-            "excludedClasses": {}
-          },
           "401719": {
             "name": "Eye of the Storm (Cancel)",
             "excludeHealers": false,
@@ -783,37 +778,15 @@
         "burnNotifyEnabled": true,
         "debuffReminderEnabled": true,
         "trackedAbnormalities": {
-          "10153141": {
-            "icon": "Icon_Skills.Ribbreaker_Tex",
-            "name": "Internal Wounds"
-          },
-          "200701": {
-            "icon": "Icon_Skills.fightingwill_Tex",
-            "name": "Lancer Arush"
-          },
-          "702004": {
-            "icon": "Icon_Skills.summonspiritofattack2_Tex",
-            "name": "Mystic 1min buff"
-          },
           "27160": {
             "icon": "Icon_Skills.breakmagicaldef_tex",
             "name": "Mystic Endurance Debuff",
             "supportDebuff": true
           },
-          "805802": {
-            "icon": "Icon_Skills.Judgment_Tex",
-            "name": "Priest Edict for self"
-          },
           "28090": {
             "icon": "Icon_Skills.breakmagicaldef_tex",
             "name": "Priest Endurance Debuff",
             "supportDebuff": true
-          },
-          "10153140": {
-            "icon": "Icon_Skills.breakphysicaldef_tex",
-            "name": "Brawler Tank Debuff",
-            "tankDebuff": true,
-            "needsTankAbnorm": true
           },
           "101210": {
             "icon": "Icon_Skills.breakphysicaldef_tex",
@@ -826,6 +799,15 @@
             "name": "Lancer Debuff",
             "tankDebuff": true
           },
+          "702122": {
+            "icon": "Icon_Skills.divinelightning_Tex",
+            "name": "Elemental: Thrall of Vengeance",
+            "supportBuff": true
+          },
+          "200701": {
+            "icon": "Icon_Skills.fightingwill_Tex",
+            "name": "Lancer Arush"
+          },
           "401500": {
             "icon": "Icon_Skills.UpperSlashCombo_Tex",
             "name": "Zerk Punishing Strike",
@@ -837,6 +819,34 @@
             "name": "Zerk Flatten",
             "tankDebuff": true,
             "needsTankAbnorm": true
+          },
+          "702004": {
+            "icon": "Icon_Skills.summonspiritofattack2_Tex",
+            "name": "Mystic 1min buff"
+          },
+          "801503": {
+            "icon": "Icon_Skills.divinelightning_Tex",
+            "name": "Energy Stars IV",
+            "supportBuff": true
+          },
+          "805713": {
+            "icon": "Icon_Skills.Spirit3_Tex",
+            "name": "Divine Charge IV",
+            "supportBuff": true
+          },
+          "805802": {
+            "icon": "Icon_Skills.Judgment_Tex",
+            "name": "Priest Edict for self"
+          },
+          "10153140": {
+            "icon": "Icon_Skills.breakphysicaldef_tex",
+            "name": "Brawler Tank Debuff",
+            "tankDebuff": true,
+            "needsTankAbnorm": true
+          },
+          "10153141": {
+            "icon": "Icon_Skills.Ribbreaker_Tex",
+            "name": "Internal Wounds"
           }
         }
       }

@@ -32,6 +32,8 @@ const Messages = {
     `<img src='img://abonormality__${eventId}' width='48' height='48' vspace='-7' /><font size="24">&nbsp;expired</font>`,
   TrackedDebuffExpiring: (eventId) =>
     `<img src='img://abonormality__${eventId}' width='48' height='48' vspace='-7' /><font size="24">&nbsp;ending</font>`,
+  TrackedBuffExpiring: (eventId) =>
+    `<img src='img://abonormality__${eventId}' width='48' height='48' vspace='-7' /><font size="24">&nbsp;ending</font>`,
   TrackedAbnormalityActivated: (eventId) =>
     `<img src='img://abonormality__${eventId}' width='48' height='48' vspace='-7' /><font size="24">&nbsp;activated</font>`,
   DpsBurning: (dpsName) => `${dpsName} is burning`,
@@ -56,6 +58,7 @@ class SimpleBattleNotify extends BaseMod {
   playerRole = this.PlayerRoles.DPS;
   bossGameId = null;
   fightStartInSeconds = 0;
+  MaxExpiredWarnings = 5;
 
   BurnSkillsMap = [
     { skillId: 163100, class: 8, className: "Reaper" },
@@ -87,6 +90,9 @@ class SimpleBattleNotify extends BaseMod {
     };
 
     this.Hooks = {
+      // S_PARTY_MEMBER_BUFF_UPDATE: {
+      //   handler: console.log,
+      // },
       S_BOSS_GAGE_INFO: {
         version: "*",
         handler: (event) => {
@@ -134,9 +140,16 @@ class SimpleBattleNotify extends BaseMod {
           )
             return;
 
-          const { needsTankAbnorm, tankDebuff, supportDebuff } =
+          const { needsTankAbnorm, tankDebuff, supportDebuff, supportBuff } =
             this.Config.settings.trackedAbnormalities[event.id];
 
+          if (supportBuff)
+            if (this.playerRole == this.PlayerRoles.Healer) {
+              this.setAbnormExpiringTimeout(event);
+              return;
+            } else return;
+
+          // TrackedAbnormalityActivated
           if (
             event.source != this.mod.game.me.gameId &&
             this.mod.game.party.getMemberData(event.source)
@@ -155,20 +168,10 @@ class SimpleBattleNotify extends BaseMod {
           )
             return;
 
-          if (event.target == this.bossGameId) {
-            if (!this.trackedAbnorms[event.id])
-              this.trackedAbnorms[event.id] = {};
+          // TrackedDebuffExpiring
 
-            const abnorm = this.trackedAbnorms[event.id];
-            this.mod.clearInterval(abnorm.interval);
-            this.mod.clearTimeout(abnorm.timeout);
-            abnorm.timeout = this.mod.setTimeout(() => {
-              sendCustomStyleMessage(this.mod)(
-                Messages.TrackedDebuffExpiring(event.id),
-                event.id,
-                MessageTypes.TrackedDebuffExpiring.style
-              );
-            }, Number(event.duration) - 3 * 1000);
+          if (event.target == this.bossGameId) {
+            this.setAbnormExpiringTimeout(event);
           }
         },
       },
@@ -178,89 +181,92 @@ class SimpleBattleNotify extends BaseMod {
         handler: (event) => {
           const trackedAbnorm = this.trackedAbnorms[event.id];
 
-          if (event.target != this.bossGameId || !trackedAbnorm) return;
+          if (!trackedAbnorm) return;
 
-          const { needsTankAbnorm } =
+          const { needsTankAbnorm, supportBuff } =
             this.Config.settings.trackedAbnormalities[event.id];
+
+          // supportBuffs tracking
+          if (supportBuff)
+            if (this.playerRole == this.PlayerRoles.Healer) {
+              this.setAbnormExpiringTimeout(event);
+              return;
+            } else return;
 
           if (
             needsTankAbnorm &&
+            event.target != this.bossGameId &&
             !this.tankAbnorms.find((ab) => ab in this.mod.game.me.abnormalities)
           )
             return;
 
-          this.mod.clearInterval(trackedAbnorm.interval);
-          this.mod.clearTimeout(trackedAbnorm.timeout);
-          trackedAbnorm.timeout = this.mod.setTimeout(() => {
-            sendCustomStyleMessage(this.mod)(
-              Messages.TrackedDebuffExpiring(event.id),
-              event.id,
-              MessageTypes.TrackedDebuffExpiring.style
-            );
-          }, Number(event.duration) - 3 * 1000);
+          this.setAbnormExpiringTimeout(event);
         },
       },
       S_ABNORMALITY_END: {
         version: "*",
         position: -9999999,
         handler: (event) => {
+          if (!mod.game.me.inCombat) return;
+
           const trackedAbnorm = this.trackedAbnorms[event.id];
 
+          if (!trackedAbnorm) return;
+
+          const { tankDebuff, supportDebuff, supportBuff } =
+            this.Config.settings.trackedAbnormalities[event.id];
+
+          //TrackedDebuffExpired
+          if ((tankDebuff || supportDebuff) && event.target != this.bossGameId)
+            return;
+
           if (
-            !this.Config.settings.debuffReminderEnabled ||
-            event.target != this.bossGameId ||
-            !(event.id in this.Config.settings.trackedAbnormalities) ||
-            !trackedAbnorm
+            tankDebuff &&
+            !this.tankAbnorms.find((ab) => ab in this.mod.game.me.abnormalities)
           )
             return;
 
-          const { tankDebuff, supportDebuff } =
-            this.Config.settings.trackedAbnormalities[event.id];
-
           if (
-            (tankDebuff &&
-              this.tankAbnorms.find(
-                (ab) => ab in this.mod.game.me.abnormalities
-              )) ||
-            (supportDebuff && this.playerRole == this.PlayerRoles.Healer)
-          ) {
-            this.sendDebuffExpiredMsg(event.id);
-            this.mod.clearInterval(trackedAbnorm.interval);
-            this.mod.clearTimeout(trackedAbnorm.timeout);
-            trackedAbnorm.expiredWarnings = 0;
-            trackedAbnorm.interval = this.mod.setInterval(() => {
-              this.sendDebuffExpiredMsg(event.id);
-              trackedAbnorm.expiredWarnings++;
-              if (trackedAbnorm.expiredWarnings >= 3) {
-                this.mod.clearInterval(trackedAbnorm.interval);
-                delete this.trackedAbnorms[event.id];
-              }
-            }, 2 * 1000);
-          }
+            (supportDebuff || supportBuff) &&
+            this.playerRole != this.PlayerRoles.Healer
+          )
+            return;
+
+          this.sendDebuffExpiredMsg(event.id);
+          this.mod.clearInterval(trackedAbnorm.interval);
+          this.mod.clearTimeout(trackedAbnorm.timeout);
+          trackedAbnorm.expiredWarnings = 0;
+          trackedAbnorm.interval = this.mod.setInterval(() => {
+            if (this.mod.game.me.inCombat) this.sendDebuffExpiredMsg(event.id);
+            trackedAbnorm.expiredWarnings++;
+            if (trackedAbnorm.expiredWarnings >= 3) {
+              this.mod.clearInterval(trackedAbnorm.interval);
+              delete this.trackedAbnorms[event.id];
+            }
+          }, 2 * 1000);
         },
       },
     };
 
     this.Commands = (key, value) => {
-      this.handleCommand(key, value);
+      switch (key) {
+        case "help":
+          this.showHelp();
+          break;
+        case "burnn":
+          this.toggleEnabledSettings("burnNotifyEnabled");
+          break;
+        case "debuffr":
+          this.toggleEnabledSettings("debuffReminderEnabled");
+          break;
+        case "default":
+          this.resetConfigToDefault();
+          break;
+        default:
+          this.toggleEnableMod();
+          break;
+      }
     };
-  }
-
-  handleCommand(key, value) {
-    switch (key) {
-      case "help":
-        this.showHelp();
-        break;
-      case "burnn":
-        this.toggleEnabledSettings("burnNotifyEnabled");
-        break;
-      case "debuffr":
-        this.toggleEnabledSettings("debuffReminderEnabled");
-        break;
-      default:
-        this.toggleEnableMod();
-        break;
-    }
   }
 
   showHelp() {
@@ -296,7 +302,6 @@ class SimpleBattleNotify extends BaseMod {
 
   resetData() {
     this.fightStartInSeconds = 0;
-    this.playerRole = this.PlayerRoles.DPS;
 
     for (const abnorm in this.trackedAbnorms) {
       const { timeout, interval } = this.trackedAbnorms[abnorm];
@@ -311,6 +316,35 @@ class SimpleBattleNotify extends BaseMod {
       eventId,
       MessageTypes.TrackedDebuffExpiring.style
     );
+  }
+  setAbnormExpiringTimeout(event) {
+    if (!this.trackedAbnorms[event.id]) this.trackedAbnorms[event.id] = {};
+
+    const abnorm = this.trackedAbnorms[event.id];
+    this.mod.clearInterval(abnorm.interval);
+    this.mod.clearTimeout(abnorm.timeout);
+    abnorm.timeout = this.mod.setTimeout(() => {
+      if (!this.mod.game.me.inCombat) return;
+      sendCustomStyleMessage(this.mod)(
+        Messages.TrackedBuffExpiring(event.id),
+        event.id,
+        MessageTypes.TrackedDebuffExpiring.style
+      );
+    }, Number(event.duration) - 3 * 1000);
+  }
+  setAbnormExpiredInterval(event) {
+    this.sendDebuffExpiredMsg(event.id);
+    this.mod.clearInterval(trackedAbnorm.interval);
+    this.mod.clearTimeout(trackedAbnorm.timeout);
+    trackedAbnorm.expiredWarnings = 0;
+    trackedAbnorm.interval = this.mod.setInterval(() => {
+      if (this.mod.game.me.inCombat) this.sendDebuffExpiredMsg(event.id);
+      trackedAbnorm.expiredWarnings++;
+      if (trackedAbnorm.expiredWarnings >= this.MaxExpiredWarnings) {
+        this.mod.clearInterval(trackedAbnorm.interval);
+        delete this.trackedAbnorms[event.id];
+      }
+    }, 2 * 1000);
   }
 }
 
