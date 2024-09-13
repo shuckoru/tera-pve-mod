@@ -16,13 +16,33 @@ class BattleHelper extends BaseMod {
     this.Hooks = {
       S_DUNGEON_EVENT_MESSAGE: {
         version: "*",
-        handler: (event) => this.handleChat(event),
+        handler: (event) => this.handleDngEventMsg(event),
+      },
+      S_QUEST_BALLOON: {
+        version: "*",
+        handler: (event) => this.handleQuestBaloon(event),
       },
     };
     this.Commands = async (key, value) => this.handleCommand(key, value);
   }
 
-  async handleChat(event) {
+  justLogIt(event) {
+    console.log(event);
+  }
+
+  async sendMsg(msg) {
+    if (!msg || msg == "") return;
+
+    if (this.Config?.settings?.sendToParty)
+      await this.mod.send("C_CHAT", "*", {
+        channel: this.PartyMessageChannel,
+        message: `(B) ${msg}`,
+      });
+    else this.cmdMsg(`(B) ${msg}`);
+  }
+
+  async handleDngEventMsg(event) {
+    if (!this.Config.enabled) return;
     const msgId = event.message.split(":")[1];
 
     const notWhitelisted =
@@ -35,8 +55,6 @@ class BattleHelper extends BaseMod {
 
     if (notWhitelisted) return;
 
-    if (!this.Config.enabled) return;
-
     const result = await this.mod.queryData(
       "/StrSheet_Dungeon/String@id=?/",
       [Number(msgId)],
@@ -46,20 +64,35 @@ class BattleHelper extends BaseMod {
     );
     const textMessageFromBoss = result?.attributes.string;
 
-    if (!textMessageFromBoss || textMessageFromBoss == "") return;
+    this.sendMsg(textMessageFromBoss);
+  }
 
-    if (this.Config?.settings?.sendToParty)
-      await this.mod.send("C_CHAT", "*", {
-        channel: this.PartyMessageChannel,
-        message: `(Boss) ${textMessageFromBoss}`,
-      });
-    else if (this.mod.game.party.inParty())
-      this.mod.send("S_CHAT", "*", {
-        channel: this.PartyMessageChannel,
-        name: "Boss",
-        message: textMessageFromBoss,
-      });
-    else this.cmdMsg(`[Boss] ${textMessageFromBoss}`);
+  async handleQuestBaloon(event) {
+    if (!this.Config.enabled) return;
+
+    const regex = /^\d+/;
+    const msgId = event.message.split(":")[1].match(regex)[0];
+
+    const notWhitelisted =
+      this.Config.settings.whitelistedMessages?.indexOf(Number(msgId)) == -1;
+
+    if (this.DebugMode)
+      this.cmdMsg(
+        `Message ID: ${msgId}${notWhitelisted ? "" : " (whitelisted)"}`
+      );
+
+    if (notWhitelisted) return;
+
+    const result = await this.mod.queryData(
+      "/StrSheet_MonsterBehavior/String@id=?/",
+      [Number(msgId)],
+      false,
+      false,
+      ["msg"]
+    );
+    const textMessageFromBoss = result?.attributes.msg;
+
+    this.sendMsg(textMessageFromBoss);
   }
 
   async handleCommand(key, value) {
@@ -93,6 +126,9 @@ class BattleHelper extends BaseMod {
       case "party":
         this.toggleEnabledSettings("sendToParty");
         break;
+      case "default":
+        this.resetConfigToDefault();
+        break;
       case "help":
         this.showHelp();
         console.log(this.Config.settings.whitelistedMessages);
@@ -109,6 +145,7 @@ class BattleHelper extends BaseMod {
 <font color="#56B4E9">party</font>: Toggle party chat relay.
 <font color="#56B4E9">msg [msgId]</font>: Add/remove msg from whitelist.
 <font color="#56B4E9">debug</font>: Toggle debug mode (default disabled).
+<font color="#56B4E9">default</font>: Reset config to default.
 <font color="#56B4E9">help</font>: Show this message.
 <font color="#56B4E9">[any other key]</font>: Enable/disable mod.`;
     this.cmdMsg(helpMessage);
