@@ -28,7 +28,7 @@
 		"node_modules/tera-mod-commons/index.js": "46f7b5c0f8ca60fd316c0a0153a337b9d818ccd0c6f1fa40574c105183e1b9c2",
 		"package-lock.json": "dec40ab6405aeb0f5ada266ca6f8906ed5348e502208b42493633fa7cba8198b",
 		"src/config.js": "7ba024bfd47876dd3194b4592c454e6bc3e57d5c03d1eabde53151fd5de4d7c5",
-		"src/index.js": "d0db631e6c97a48f2447214cd547fe005a18f378e62c7b4f382fb710f9e81110",
+		"src/index.js": "fc0055875565b2862654c449c0229aaddca8484c6b22869c1b039ac40d3535a0",
 		"src/mods/abhide.js": "7928bb60cdb3e423479739b3626240a9e0cd1f578b0a454c430dc0fcc8b87ddb",
 		"src/mods/afk.js": "16aea7879f34945e0fe444b469eed566888c7de48f7b32a3e089fee37ad09299",
 		"src/mods/autoNegotiate.js": "7e04e2b9028b63940515ca124d3a65f3864377e9ac0076d84d3f06750b21594f",
@@ -54,7 +54,7 @@
 		"node_modules/tera-mod-commons/LICENSE": "7f5bb1d729aaddbac5e13a7bf0caa30f926971e79f7ff2beb03ec4f05ac2800d",
 		"node_modules/tera-mod-commons/package.json": "b908591c092f271ac79ed2d3ce7a6484ab80343ba2b2a54a2e655b8b2cedcc4f",
 		"package.json": "a21db991f7227b32443114955d78b33f272262f2f6d54abbdd344b290df47b2c",
-		"config/defaults/config.json": "7620d98ebd7e4939d302cc0831b421e45a9397e59d968187f208a9388571bb8e",
+		"config/defaults/config.json": "d32319b9cff3b7c6d599b1c128e045e62ef55f1c30407de62755a2aeab218d43",
 		"node_modules/lodash.merge/LICENSE": "f71e8ed126b46346494aad5486874cd8f0aafe95092ed67d2e3cb6110f939abc",
 		"node_modules/lodash.merge/index.js": "39ad0f3cd6cdf4d09d1d53acad6f5a68f594e87309724230c2950201e4527cae",
 		"node_modules/lodash.merge/package.json": "5aaf4c24df9052e680d0728754c249fb94c11aef2e76ec3f76320431915c92f1",
@@ -73,7 +73,7 @@
 		"src/mods/style.js": "a1d3f692c41a3de3c73c29adacf9b99f39c28b813fe8dcaca625e94eb42d1b4f",
 		"src/mods/tl.js": "fe2f5628fe3c9a46701687053ed8d8d6b6837d66a286653a5427046b663e5365",
 		"src/utils.js": "cf04edcee981192687ee0ee8ccf7b7406618224bce8415666dd30d06a414441c",
-		"config/migrations.json": "d66843a8a4a26791ce3bb6dd0d05819b59f207d038efa5c5c54fe4e674996bae",
+		"config/migrations.json": "777d07c16c8a91cc89f8f20e65c5ca5420ebd46f22426474ba0f3f6d7c3e3a8d",
 		"src/defs/C_REQUEST_SPAWN_SERVANT.1.def": "bf34f8f2287f84ad6f67245f31da6934397d81f03db9c8878e4d3ead89a6c83e",
 		"src/defs/C_REQUEST_SPAWN_SERVANT.2.def": "c1c88815d0c97233193ba0d03f11b64bc43aff04cf940931c90e538b1a46b5f5",
 		"src/defs/C_START_SERVANT_ACTIVE_SKILL.1.def": "4fb53e84df698b8a68e2160eaf818284296409232124b4e518936e1a325b3f5a",
@@ -82,6 +82,7 @@
 		"src/defs/S_UPDATE_SERVANT_INFO.1.def": "355dac2b462cde6b2c00e6712ffdef4807013605d7b4e3d6b33fd12652f7ccd2",
 		"src/mods/pet.js": "c84181fda98ca6ebc34b46b7c1b579be847e264a4dbab5cf9d64bd843fb43998",
 		"src/mods/translate.js": "4ac2165f478f3d9cf7216440ac85d21e49559ceec17927f3720de04484e80f58",
-		"src/defs/C_REQUEST_FINISH_GUILD_QUEST.1.def": "168e06ba3159d1dec0cfa060365f105d0dcfe32aaa1c690b7f7e452a500e80c4"
+		"src/defs/C_REQUEST_FINISH_GUILD_QUEST.1.def": "168e06ba3159d1dec0cfa060365f105d0dcfe32aaa1c690b7f7e452a500e80c4",
+		"src/mods/battleHelper.js": "8c86ee0e4dce789fec4d27910eeccefe3707d67acb95aa11a064558a48a58a58"
 	}
 }
