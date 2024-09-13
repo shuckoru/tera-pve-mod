@@ -1,10 +1,20 @@
 {
-  "version": 2,
+  "version": 3,
   "generalSettings": {},
   "mods": {
-    "translate": {
+    "bhelper": {
       "enabled": true,
-      "settings": {}
+      "settings": {
+        "sendToParty": false,
+        "whitelistedMessages": [
+          31071418, 31071428, 31072104, 31072166, 31073233, 31073235, 31075064,
+          31075464, 31074104, 31074398, 31075986, 31074642, 31075984, 31074334,
+          31075430, 31074359
+        ]
+      }
+    },
+    "translate": {
+      "enabled": true
     },
     "pet": {
       "enabled": true,

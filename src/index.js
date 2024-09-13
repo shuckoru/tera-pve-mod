@@ -5,6 +5,14 @@ const fs = require("fs");
 const path = require("path");
 
 class PVEMod {
+  LatestChangelog = `New Version Released: <font color="#e9d556">3</font>
+- New Mod added: <font color="#56B4E9">bhelper</font>.
+It allows you to have some specific messages in dungeons to be relayed in party/toolbox chat.
+For more info use the command <font color="#56B4E9">bhelper help</font>.
+- Safechat Fixes: <font color="#56B4E9">safechat</font> is now working stably.
+This mod encrypts the whispers with and end-to-end encryption mechanism.
+For more info use the command <font color="#56B4E9">safechat help</font>.`;
+
   constructor(dispatch) {
     this.dispatch = dispatch;
     this.mods = {};
@@ -94,6 +102,9 @@ class PVEMod {
         )
         .join("\n");
       this.dispatch.command.message(`Installed Mods:\n${modsList}`);
+      this.dispatch.command.message(
+        `For any doubts/issues about the mod write me on discord @shuckol`
+      );
     });
 
     this.dispatch.command.remove("uninstall");
@@ -101,6 +112,14 @@ class PVEMod {
 
     this.dispatch.command.remove("install");
     this.dispatch.command.add("install", this.installMod.bind(this));
+
+    if (
+      this.Config?.generalSettings?.latestSeenChangelog != this.Config.version
+    ) {
+      this.dispatch.command.message(this.LatestChangelog);
+      this.Config.generalSettings.latestSeenChangelog = this.Config.version;
+      updateGeneralSettings(this.Config.generalSettings);
+    }
   }
 
   unloadMods() {
@@ -197,7 +216,6 @@ class PVEMod {
       console.error("Error reading definitions directory", err);
     }
 
-    // Helper function to parse the file name
     function parseFileName(fileName) {
       const parts = fileName.split(".");
       const hName = parts[0];
