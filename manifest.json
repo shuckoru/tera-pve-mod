@@ -54,7 +54,7 @@
 		"node_modules/tera-mod-commons/LICENSE": "7f5bb1d729aaddbac5e13a7bf0caa30f926971e79f7ff2beb03ec4f05ac2800d",
 		"node_modules/tera-mod-commons/package.json": "b908591c092f271ac79ed2d3ce7a6484ab80343ba2b2a54a2e655b8b2cedcc4f",
 		"package.json": "a21db991f7227b32443114955d78b33f272262f2f6d54abbdd344b290df47b2c",
-		"config/defaults/config.json": "d32319b9cff3b7c6d599b1c128e045e62ef55f1c30407de62755a2aeab218d43",
+		"config/defaults/config.json": "d5ebf31d854c5b39073a81f9392cd909576770bcf2fc823d6452bb1264e269ec",
 		"node_modules/lodash.merge/LICENSE": "f71e8ed126b46346494aad5486874cd8f0aafe95092ed67d2e3cb6110f939abc",
 		"node_modules/lodash.merge/index.js": "39ad0f3cd6cdf4d09d1d53acad6f5a68f594e87309724230c2950201e4527cae",
 		"node_modules/lodash.merge/package.json": "5aaf4c24df9052e680d0728754c249fb94c11aef2e76ec3f76320431915c92f1",
@@ -83,6 +83,6 @@
 		"src/mods/pet.js": "c84181fda98ca6ebc34b46b7c1b579be847e264a4dbab5cf9d64bd843fb43998",
 		"src/mods/translate.js": "4ac2165f478f3d9cf7216440ac85d21e49559ceec17927f3720de04484e80f58",
 		"src/defs/C_REQUEST_FINISH_GUILD_QUEST.1.def": "168e06ba3159d1dec0cfa060365f105d0dcfe32aaa1c690b7f7e452a500e80c4",
-		"src/mods/battleHelper.js": "8c86ee0e4dce789fec4d27910eeccefe3707d67acb95aa11a064558a48a58a58"
+		"src/mods/battleHelper.js": "82a1281f10898bbf2160dcf5f42573c700f695e2a7db401650bab06b133fb1d0"
 	}
 }
