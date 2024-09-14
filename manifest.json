@@ -1,6 +1,6 @@
 {
 	"files": {
-		"module.json": "85c8d4ae5922868306b1f33bd02e81fb02bb88e680f602ec57aea43f5c89c887",
+		"module.json": "ef81cf76f8d45bf0e3516326886802282611fdf32290bf9b2da472d984193099",
 		"node_modules/clone/clone.iml": "2fdb46bf1b76ee0ece04fd567e05ed6a32eda74c2a11f877481da9d5293f35c8",
 		"node_modules/clone/clone.js": "438bf6f1450e15555659cd67e6a63c25f04539ef73cdca98f736a7363ec017e7",
 		"node_modules/dotenv/CHANGELOG.md": "f6f05a1a5d5c792471eddad48e4fe8b7943b0f05ad6da09d5a6c8586f7311408",
@@ -54,7 +54,7 @@
 		"node_modules/tera-mod-commons/LICENSE": "7f5bb1d729aaddbac5e13a7bf0caa30f926971e79f7ff2beb03ec4f05ac2800d",
 		"node_modules/tera-mod-commons/package.json": "b908591c092f271ac79ed2d3ce7a6484ab80343ba2b2a54a2e655b8b2cedcc4f",
 		"package.json": "a21db991f7227b32443114955d78b33f272262f2f6d54abbdd344b290df47b2c",
-		"config/defaults/config.json": "d5ebf31d854c5b39073a81f9392cd909576770bcf2fc823d6452bb1264e269ec",
+		"config/defaults/config.json": "151b34673375af877414dc5f96fc10c93677670b507b9774a44551bba93a9d39",
 		"node_modules/lodash.merge/LICENSE": "f71e8ed126b46346494aad5486874cd8f0aafe95092ed67d2e3cb6110f939abc",
 		"node_modules/lodash.merge/index.js": "39ad0f3cd6cdf4d09d1d53acad6f5a68f594e87309724230c2950201e4527cae",
 		"node_modules/lodash.merge/package.json": "5aaf4c24df9052e680d0728754c249fb94c11aef2e76ec3f76320431915c92f1",
@@ -62,7 +62,7 @@
 		"src/mods/autovg.js": "f19925f3b7c447610f1485d641b595d5d178493b676e27f0760fb7544eb23402",
 		"src/mods/base.js": "5460bfc64f2b430aca2abb6c77b88b83f32039e740b7bb2c3d90daf37b91de77",
 		"src/mods/bb.js": "6c61a52babe9d8549ae2a4f2209a4b0138259e4535949e79ae568f7299a119ee",
-		"src/mods/bnotify.js": "f096ed5dc20ef0ffcc6cd00da09e7e2a98c485a099f391326f73640a7f0d9998",
+		"src/mods/bnotify.js": "54b8bfc1017e633b1fe2b5416e3e45875b0c493ebecbd0bc1f4358d79d7f7857",
 		"src/mods/csskip.js": "aed1d78add95230d4772ef7cf993e63f17fac2023922dbd61f0e1a043897f744",
 		"src/mods/debug.js": "e12ba4a64934cc0c03bd22828c9f1c2e9bcff59e884aeb88745ecfa67432b96b",
 		"src/mods/fastexit.js": "09ab84e2f12871f196d5ebf55da0f42ca690d6bd74751946ee51a5ad38dd1256",
