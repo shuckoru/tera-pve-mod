@@ -222,8 +222,6 @@ class SimpleBattleNotify extends BaseMod {
 
           if (!trackedAbnorm) return;
 
-          this.cmdMsg(2);
-
           const {
             burnAbnorm,
             tankBuff,
@@ -239,8 +237,6 @@ class SimpleBattleNotify extends BaseMod {
             ((supportDebuff || tankDebuff) && event.target != this.bossGameId)
           )
             return;
-
-          this.cmdMsg(3);
 
           this.setAbnormExpiredInterval(event);
         },
