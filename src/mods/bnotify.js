@@ -232,14 +232,6 @@ class SimpleBattleNotify extends BaseMod {
             supportBuff,
           } = this.Config.settings.trackedAbnormalities[event.id];
 
-          console.log({
-            tankBuff,
-            tankDebuff,
-            supportDebuff,
-            supportBuff,
-            iAmAHealer: this.iAmAHealer(),
-          });
-
           if (
             burnAbnorm ||
             ((supportBuff || supportDebuff) && !this.iAmAHealer()) ||
