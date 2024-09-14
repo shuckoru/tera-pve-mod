@@ -336,6 +336,7 @@ class SimpleBattleNotify extends BaseMod {
   }
 
   setAbnormExpiredInterval(event) {
+    const trackedAbnorm = this.trackedAbnorms[event.id];
     this.sendDebuffExpiredMsg(event.id);
     this.mod.clearInterval(trackedAbnorm.interval);
     this.mod.clearTimeout(trackedAbnorm.timeout);
