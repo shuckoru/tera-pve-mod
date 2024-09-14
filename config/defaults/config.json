@@ -804,7 +804,7 @@
             "icon": "Icon_Skills.breakphysicaldef_tex",
             "name": "Warrior Tank Debuff",
             "tankDebuff": true,
-            "needsTankAbnorm": true
+            "trackedByTanks": true
           },
           "200302": {
             "icon": "Icon_Skills.BreakPhysicalDef_Tex",
@@ -818,23 +818,23 @@
           },
           "200701": {
             "icon": "Icon_Skills.fightingwill_Tex",
-            "name": "Lancer Arush"
+            "name": "Lancer Arush",
+            "burnAbnorm": true
           },
           "401500": {
             "icon": "Icon_Skills.UpperSlashCombo_Tex",
             "name": "Zerk Punishing Strike",
-            "tankDebuff": true,
-            "needsTankAbnorm": true
+            "tankDebuff": true
           },
           "401800": {
             "icon": "Icon_Skills.bash_Tex",
             "name": "Zerk Flatten",
-            "tankDebuff": true,
-            "needsTankAbnorm": true
+            "tankDebuff": true
           },
           "702004": {
             "icon": "Icon_Skills.summonspiritofattack2_Tex",
-            "name": "Mystic 1min buff"
+            "name": "Mystic 1min buff",
+            "burnAbnorm": true
           },
           "801503": {
             "icon": "Icon_Skills.divinelightning_Tex",
@@ -848,17 +848,18 @@
           },
           "805802": {
             "icon": "Icon_Skills.Judgment_Tex",
-            "name": "Priest Edict for self"
+            "name": "Priest Edict 1min buff",
+            "burnAbnorm": true
           },
           "10153140": {
             "icon": "Icon_Skills.breakphysicaldef_tex",
             "name": "Brawler Tank Debuff",
-            "tankDebuff": true,
-            "needsTankAbnorm": true
+            "tankDebuff": true
           },
           "10153141": {
             "icon": "Icon_Skills.Ribbreaker_Tex",
-            "name": "Internal Wounds"
+            "name": "Internal Wounds",
+            "burnAbnorm": true
           }
         }
       }
