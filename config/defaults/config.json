@@ -1,10 +1,22 @@
 {
-  "version": 2,
+  "version": 3,
   "generalSettings": {},
   "mods": {
-    "translate": {
+    "bhelper": {
       "enabled": true,
-      "settings": {}
+      "settings": {
+        "sendToParty": false,
+        "whitelistedMessages": [
+          31071418, 31071428, 31072104, 31072166, 31073233, 31073235, 31075064,
+          31075464, 31074104, 31074398, 31075986, 31074642, 31075984, 31074334,
+          31075430, 31074359, 310702, 310703, 310704, 735301, 735302, 735303,
+          935301, 935302, 935303, 3034301, 3034302, 3034303, 2116010062,
+          2116010063, 2116010064
+        ]
+      }
+    },
+    "translate": {
+      "enabled": true
     },
     "pet": {
       "enabled": true,
@@ -230,11 +242,6 @@
           },
           "400301": {
             "name": "Dash II",
-            "excludeHealers": false,
-            "excludedClasses": {}
-          },
-          "401704": {
-            "name": "Bloodshed",
             "excludeHealers": false,
             "excludedClasses": {}
           },
@@ -783,60 +790,76 @@
         "burnNotifyEnabled": true,
         "debuffReminderEnabled": true,
         "trackedAbnormalities": {
-          "10153141": {
-            "icon": "Icon_Skills.Ribbreaker_Tex",
-            "name": "Internal Wounds"
-          },
-          "200701": {
-            "icon": "Icon_Skills.fightingwill_Tex",
-            "name": "Lancer Arush"
-          },
-          "702004": {
-            "icon": "Icon_Skills.summonspiritofattack2_Tex",
-            "name": "Mystic 1min buff"
-          },
           "27160": {
             "icon": "Icon_Skills.breakmagicaldef_tex",
             "name": "Mystic Endurance Debuff",
             "supportDebuff": true
-          },
-          "805802": {
-            "icon": "Icon_Skills.Judgment_Tex",
-            "name": "Priest Edict for self"
           },
           "28090": {
             "icon": "Icon_Skills.breakmagicaldef_tex",
             "name": "Priest Endurance Debuff",
             "supportDebuff": true
           },
-          "10153140": {
-            "icon": "Icon_Skills.breakphysicaldef_tex",
-            "name": "Brawler Tank Debuff",
-            "tankDebuff": true,
-            "needsTankAbnorm": true
-          },
           "101210": {
             "icon": "Icon_Skills.breakphysicaldef_tex",
             "name": "Warrior Tank Debuff",
             "tankDebuff": true,
-            "needsTankAbnorm": true
+            "trackedByTanks": true
           },
           "200302": {
             "icon": "Icon_Skills.BreakPhysicalDef_Tex",
             "name": "Lancer Debuff",
             "tankDebuff": true
           },
+          "702122": {
+            "icon": "Icon_Skills.divinelightning_Tex",
+            "name": "Elemental: Thrall of Vengeance",
+            "supportBuff": true
+          },
+          "200701": {
+            "icon": "Icon_Skills.fightingwill_Tex",
+            "name": "Lancer Arush",
+            "burnAbnorm": true
+          },
           "401500": {
             "icon": "Icon_Skills.UpperSlashCombo_Tex",
             "name": "Zerk Punishing Strike",
-            "tankDebuff": true,
-            "needsTankAbnorm": true
+            "tankDebuff": true
           },
           "401800": {
             "icon": "Icon_Skills.bash_Tex",
             "name": "Zerk Flatten",
-            "tankDebuff": true,
-            "needsTankAbnorm": true
+            "tankDebuff": true
+          },
+          "702004": {
+            "icon": "Icon_Skills.summonspiritofattack2_Tex",
+            "name": "Mystic 1min buff",
+            "burnAbnorm": true
+          },
+          "801503": {
+            "icon": "Icon_Skills.divinelightning_Tex",
+            "name": "Energy Stars IV",
+            "supportBuff": true
+          },
+          "805713": {
+            "icon": "Icon_Skills.Spirit3_Tex",
+            "name": "Divine Charge IV",
+            "supportBuff": true
+          },
+          "805802": {
+            "icon": "Icon_Skills.Judgment_Tex",
+            "name": "Priest Edict 1min buff",
+            "burnAbnorm": true
+          },
+          "10153140": {
+            "icon": "Icon_Skills.breakphysicaldef_tex",
+            "name": "Brawler Tank Debuff",
+            "tankDebuff": true
+          },
+          "10153141": {
+            "icon": "Icon_Skills.Ribbreaker_Tex",
+            "name": "Internal Wounds",
+            "burnAbnorm": true
           }
         }
       }

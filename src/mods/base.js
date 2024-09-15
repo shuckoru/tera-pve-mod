@@ -1,9 +1,10 @@
-const { updateModConfig } = require("../config");
+const { updateModConfig, loadConfig } = require("../config");
 
 class BaseMod {
   Name;
   Description;
 
+  Config = {};
   Hooks = {};
   Commands = null;
   EventListeners = {};
@@ -48,6 +49,16 @@ class BaseMod {
     this.Config.settings[settingsKey] = value;
     updateModConfig(this.constructor.Name, this.Config);
     this.cmdMsg(`${settingsKey} updated with value: ${value}`);
+  }
+
+  resetConfigToDefault() {
+    this.Config = {};
+
+    updateModConfig(this.constructor.Name, this.Config);
+    const newGlobalConfig = loadConfig();
+    this.Config = newGlobalConfig.mods[this.constructor.Name];
+
+    this.cmdMsg(`mod ${this.constructor.Name} config reset to default.`);
   }
 }
 

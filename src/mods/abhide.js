@@ -75,11 +75,8 @@ class AbnormsHideMod extends BaseMod {
         this.DebugMode = !this.DebugMode;
         this.cmdMsg(`abhide debug: ${this.DebugMode ? "ena" : "disa"}bled`);
         break;
-      case "reset":
-        this.Config.settings.blacklisted = {};
-        this.cmdMsg(
-          "Blacklisted abnormalities reset to default. Restart the game to see effects."
-        );
+      case "default":
+        this.resetConfigToDefault();
         break;
       default:
         this.toggleEnableMod();
@@ -96,7 +93,7 @@ class AbnormsHideMod extends BaseMod {
 <font color="#56B4E9">excludehealers [abnormalityId]</font>: Toggle healer exclusion for the specified abnormality.
 <font color="#56B4E9">excludeclass [abnormalityId]</font>: Exclude your class from the specified abnormality.
 <font color="#56B4E9">debug</font>: Toggle abnormalities debug mode.
-<font color="#56B4E9">reset</font>: Reset blacklisted abornmalities to default.
+<font color="#56B4E9">default</font>: Reset mod config to default ones.
 <font color="#56B4E9">[any other key]</font>: Toggle Abnormalities Hide Mod.`);
   }
 
