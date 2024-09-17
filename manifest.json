@@ -28,7 +28,7 @@
 		"node_modules/tera-mod-commons/index.js": "46f7b5c0f8ca60fd316c0a0153a337b9d818ccd0c6f1fa40574c105183e1b9c2",
 		"package-lock.json": "dec40ab6405aeb0f5ada266ca6f8906ed5348e502208b42493633fa7cba8198b",
 		"src/config.js": "7ba024bfd47876dd3194b4592c454e6bc3e57d5c03d1eabde53151fd5de4d7c5",
-		"src/index.js": "fc0055875565b2862654c449c0229aaddca8484c6b22869c1b039ac40d3535a0",
+		"src/index.js": "7a5ec997603a587b7ba53db88344d6fbbbc9f7653e645efe17bc1f04d9a2d853",
 		"src/mods/abhide.js": "7928bb60cdb3e423479739b3626240a9e0cd1f578b0a454c430dc0fcc8b87ddb",
 		"src/mods/afk.js": "16aea7879f34945e0fe444b469eed566888c7de48f7b32a3e089fee37ad09299",
 		"src/mods/autoNegotiate.js": "7e04e2b9028b63940515ca124d3a65f3864377e9ac0076d84d3f06750b21594f",
@@ -70,7 +70,7 @@
 		"src/mods/lockonyou.js": "d7c064dbf186a5f9b40c1ac48388f70a8d34ab7df9b20e1cb64db70faf9f810c",
 		"src/mods/npc.js": "a2799e7413a7a5fa04ec9a9ab9fc841d7c1822e19246d269af47ba1387c6c504",
 		"src/mods/salt.js": "ecb7e3b6268f3d68ea422348a733a449e8260a9b2bda5e627a48435c5c869c25",
-		"src/mods/style.js": "a1d3f692c41a3de3c73c29adacf9b99f39c28b813fe8dcaca625e94eb42d1b4f",
+		"src/mods/style.js": "bfc24cfc06d6d6fa94154ea5f718c32561693515e805651332189f0564f1ec0b",
 		"src/mods/tl.js": "fe2f5628fe3c9a46701687053ed8d8d6b6837d66a286653a5427046b663e5365",
 		"src/utils.js": "cf04edcee981192687ee0ee8ccf7b7406618224bce8415666dd30d06a414441c",
 		"config/migrations.json": "777d07c16c8a91cc89f8f20e65c5ca5420ebd46f22426474ba0f3f6d7c3e3a8d",
@@ -83,6 +83,6 @@
 		"src/mods/pet.js": "c84181fda98ca6ebc34b46b7c1b579be847e264a4dbab5cf9d64bd843fb43998",
 		"src/mods/translate.js": "4ac2165f478f3d9cf7216440ac85d21e49559ceec17927f3720de04484e80f58",
 		"src/defs/C_REQUEST_FINISH_GUILD_QUEST.1.def": "168e06ba3159d1dec0cfa060365f105d0dcfe32aaa1c690b7f7e452a500e80c4",
-		"src/mods/battleHelper.js": "82a1281f10898bbf2160dcf5f42573c700f695e2a7db401650bab06b133fb1d0"
+		"src/mods/battleHelper.js": "98bb76c622fce94e81d74b4c79ec1a39a56e61756ccb20b7f50d96c557c0aadd"
 	}
 }
