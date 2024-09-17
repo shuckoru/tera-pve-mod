@@ -11,6 +11,8 @@ class BattleHelper extends BaseMod {
 
   PartyMessageChannel = 1;
 
+  BossMessages = {};
+
   constructor(mod, config) {
     super(mod, config);
     this.Hooks = {
@@ -24,10 +26,30 @@ class BattleHelper extends BaseMod {
       },
     };
     this.Commands = async (key, value) => this.handleCommand(key, value);
-  }
-
-  justLogIt(event) {
-    console.log(event);
+    this.PostInit = async () => {
+      let results = await this.mod.queryData(
+        "/StrSheet_Dungeon/String/",
+        [],
+        true
+      );
+      for (const key in results) {
+        if (Object.prototype.hasOwnProperty.call(results, key)) {
+          const item = results[key];
+          this.BossMessages[item.attributes.id] = item.attributes.string;
+        }
+      }
+      results = await this.mod.queryData(
+        "/StrSheet_MonsterBehavior/String/",
+        [],
+        true
+      );
+      for (const key in results) {
+        if (Object.prototype.hasOwnProperty.call(results, key)) {
+          const item = results[key];
+          this.BossMessages[item.attributes.id] = item.attributes.msg;
+        }
+      }
+    };
   }
 
   async sendMsg(msg) {
@@ -55,16 +77,7 @@ class BattleHelper extends BaseMod {
 
     if (notWhitelisted) return;
 
-    const result = await this.mod.queryData(
-      "/StrSheet_Dungeon/String@id=?/",
-      [Number(msgId)],
-      false,
-      false,
-      ["string"]
-    );
-    const textMessageFromBoss = result?.attributes.string;
-
-    this.sendMsg(textMessageFromBoss);
+    this.sendMsg(this.BossMessages[msgId]);
   }
 
   async handleQuestBaloon(event) {
@@ -83,16 +96,7 @@ class BattleHelper extends BaseMod {
 
     if (notWhitelisted) return;
 
-    const result = await this.mod.queryData(
-      "/StrSheet_MonsterBehavior/String@id=?/",
-      [Number(msgId)],
-      false,
-      false,
-      ["msg"]
-    );
-    const textMessageFromBoss = result?.attributes.msg;
-
-    this.sendMsg(textMessageFromBoss);
+    this.sendMsg(this.BossMessages[msgId]);
   }
 
   async handleCommand(key, value) {
