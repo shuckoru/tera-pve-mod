@@ -39,6 +39,9 @@ For more info use the command <font color="#56B4E9">safechat help</font>.`;
         this.initializeEventListeners(mod);
         this.initializeCommands(mod);
         this.initializeHooks(mod);
+        if (mod.PostInit) {
+          mod.PostInit();
+        }
 
         if (this.Config.generalSettings?.debug)
           console.log(`Installed mod ${modName}`);
